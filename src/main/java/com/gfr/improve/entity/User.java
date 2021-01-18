@@ -23,13 +23,13 @@ public class User implements Serializable {
      */
     private String password;
     /**
-     * 电话号码
-     */
-    private String telephone;
-    /**
      * 头像
      */
     private String userIcon;
+    /**
+     * 电话号码
+     */
+    private String telephone;
     /**
      * 运动总时长
      */

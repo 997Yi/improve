@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>courseDetail</title>
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css"/>
+    <link rel="stylesheet" type="text/css" href="css/courseDetail.css">
+</head>
+
+<body>
+<!--搜索栏
+点击搜索并获取input，向服务器发送请求，获取结果后重新渲染table-->
+<div class="demoTable">
+    搜索：
+    <div class="layui-inline">
+        <input class="layui-input" name="conditions" id="conditions" autocomplete="off">
+    </div>
+    <button class="layui-btn" id="search" data-type="reload">搜索</button>
+</div>
+
+<table class="layui-hide" id="demo" lay-filter="test"></table>
+<!--自定义行工具栏-->
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<!--自定义头部工具栏-->
+<script type="text/html" id="toolbarDemo">
+    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="del">
+        <i class="layui-icon">&#xe640;</i>
+    </button>
+</script>
+<script src="layui/layui.js" type="text/javascript"></script>
+<script type="text/javascript">
+    layui.use(['table', 'form'], function () {
+        var table = layui.table,
+            form = layui.form,
+            $ = layui.jquery;
+
+        //执行一个 table 实例
+        var tableIns = table.render({
+            elem: '#demo',
+            height: 600,
+            url: 'course/queryAll' //数据接口
+            ,
+            title: '用户表',
+            page: true //开启分页
+            ,
+            toolbar: '#toolbarDemo' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            ,
+            cols: [
+                [ //表头
+                    {
+                        type: 'checkbox',
+                        fixed: 'left'
+                    }, {
+                    field: 'cId',
+                    title: 'ID',
+                    sort: true,
+                    fixed: 'left',
+                    align: 'center'
+                }, {
+                    field: 'cName',
+                    title: '名称',
+                    align: 'center',
+                    edit: 'text'
+                }, {
+                    field: 'cDescribe',
+                    title: '描述',
+                    align: 'center',
+                    edit: 'text'
+                }, {
+                    field: 'cPurl',
+                    title: '图片',
+                    align: 'center',
+                    templet: function (res) {
+                        return '<img src="' + res.url + '" />';
+                    }
+                }, {
+                    field: 'cVurl',
+                    title: '视频',
+                    align: 'center',
+                    templet: function (res) {
+                        return '<vedio src="' + res.url + '" />';
+                    }
+                }, {
+                    field: 'cTime',
+                    title: '时间',
+                    align: 'center',
+                    edit: 'text'
+                }, {
+                    fixed: 'right',
+                    title: '操作',
+                    width: 165,
+                    align: 'center',
+                    toolbar: '#barDemo'
+                }
+                ]
+            ]
+        });
+
+
+        //监听单元格编辑(单元格在线编辑)
+        table.on('edit(test)', function (obj) {  //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var value = obj.value //得到修改后的值
+                , data = obj.data //得到所在行所有键值
+                , field = obj.field; //得到字段
+
+            //向服务器发送请求进行修改操作
+            $.ajax({
+                type: "PATCH",
+                url: "course/updateCourse",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    'field': field,
+                    'value': value,
+                    'cId': data.pId
+                }),
+                success: function (res) {
+                    if (res.code == 200) {
+                        layer.msg(res.msg, {icon: 1});
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                    //请求成功以后的回调函数
+                    console.log("success");
+                },
+                error: function () {
+
+                }
+            })
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function (obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data //获得当前行数据
+                , layEvent = obj.event; //获得 lay-event 对应的值
+            if (layEvent === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+                    //向服务端发送删除指令
+                    $.ajax({
+                        type: "DELETE",
+                        url: "course/deleteCourse/" + data.cId,
+                        contentType: "application/json",
+                        dataType: "json",
+                        success: function (res) {
+                            if (res.code == 200) {
+                                obj.del(); //删除对应行（tr）的DOM结构
+                                layer.msg(res.msg, {icon: 1});
+                                layer.close(index);
+                            } else {
+                                layer.msg(res.msg, {icon: 2});
+                            }
+                            //请求成功以后的回调函数
+                            console.log("success");
+                        }
+                    })
+                });
+            }
+        });
+
+        //table重载
+        //自定义点击事件
+        $("#search").on('click', function () {
+            //这里以搜索为例
+            tableIns.reload({
+                url: "course/queryByLike",
+                where: { //设定异步数据接口的额外参数，任意设
+                    value: $("#conditions").val()
+                }
+                , page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+            });
+        })
+
+
+    });
+</script>
+</body>
+
+</html>

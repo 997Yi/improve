@@ -76,4 +76,12 @@ public class UserServiceImpl implements UserService {
     public boolean deleteById(String userId) {
         return this.userDao.deleteById(userId) > 0;
     }
+
+    /**
+     * 查询用户数量
+     * @return 用户数量
+     */
+    public int queryUserNum(){
+        return this.userDao.queryUserNum();
+    }
 }

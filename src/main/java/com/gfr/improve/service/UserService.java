@@ -53,4 +53,9 @@ public interface UserService {
      */
     boolean deleteById(String userId);
 
+    /**
+     * 查询用户数量
+     * @return 用户数量
+     */
+    int queryUserNum();
 }

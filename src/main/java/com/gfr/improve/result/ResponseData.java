@@ -8,10 +8,9 @@ public class ResponseData {
 
     private String msg;
 
-    private  Object data;
-
     private  Integer count;
 
+    private  Object data;
 
 
 
@@ -31,6 +30,13 @@ public class ResponseData {
         this.code = responseCode.getCode();
         this.msg = responseCode.getMsg();
         this.data = data;
+    }
+
+    public ResponseData(ResponseCode responseCode, Object data, Integer count) {
+        this.code = responseCode.getCode();
+        this.msg = responseCode.getMsg();
+        this.data = data;
+        this.count = count;
     }
 
     public ResponseData(String code, String msg) {

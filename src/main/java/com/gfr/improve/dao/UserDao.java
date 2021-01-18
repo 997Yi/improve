@@ -79,4 +79,11 @@ public interface UserDao {
      */
     int deleteById(String userId);
 
+
+    /**
+     * 查询用户数量
+     * @return 用户数量
+     */
+    int queryUserNum();
+
 }

@@ -24,4 +24,10 @@ public class HomeController {
         return "uploadCourse";
     }
 
+    //跳转到上传课程页面
+    @ApiIgnore
+    @RequestMapping("getUserList")
+    public String getUserListCourse() {
+        return "userList";
+    }
 }

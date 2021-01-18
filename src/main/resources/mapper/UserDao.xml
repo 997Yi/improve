@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gfr.improve.dao.UserDao">
+
+    <resultMap type="com.gfr.improve.entity.User" id="UserMap">
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="password" column="password" jdbcType="VARCHAR"/>
+        <result property="telephone" column="telephone" jdbcType="VARCHAR"/>
+        <result property="userIcon" column="user_icon" jdbcType="VARCHAR"/>
+        <result property="sportTime" column="sport_time" jdbcType="INTEGER"/>
+        <result property="sportDay" column="sport_day" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="UserMap">
+        select user_id,
+               username,
+               password,
+               telephone,
+               user_icon,
+               sport_time,
+               sport_day
+        from improve.user
+        where user_id = #{userId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="UserMap">
+        select user_id,
+               username,
+               password,
+               telephone,
+               user_icon,
+               sport_time,
+               sport_day
+        from improve.user limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="UserMap">
+        select
+        user_id, username, password, telephone, user_icon, sport_time, sport_day
+        from improve.user
+        <where>
+            <if test="userId != null and userId != ''">
+                and user_id = #{userId}
+            </if>
+            <if test="username != null and username != ''">
+                and username = #{username}
+            </if>
+            <if test="password != null and password != ''">
+                and password = #{password}
+            </if>
+            <if test="telephone != null and telephone != ''">
+                and telephone = #{telephone}
+            </if>
+            <if test="userIcon != null and userIcon != ''">
+                and user_icon = #{userIcon}
+            </if>
+            <if test="sportTime != null">
+                and sport_time = #{sportTime}
+            </if>
+            <if test="sportDay != null">
+                and sport_day = #{sportDay}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="userId" useGeneratedKeys="true">
+        insert into improve.user(username, password, telephone, user_icon, sport_time, sport_day)
+        values (#{username}, #{password}, #{telephone}, #{userIcon}, #{sportTime}, #{sportDay})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into improve.user(username, password, telephone, user_icon, sport_time, sport_day)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.username}, #{entity.password}, #{entity.telephone}, #{entity.userIcon}, #{entity.sportTime},
+            #{entity.sportDay})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into improve.user(username, password, telephone, user_icon, sport_time, sport_day)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.username}, #{entity.password}, #{entity.telephone}, #{entity.userIcon}, #{entity.sportTime},
+            #{entity.sportDay})
+        </foreach>
+        on duplicate key update
+        username = values(username) , password = values(password) , telephone = values(telephone) , user_icon =
+        values(user_icon) , sport_time = values(sport_time) , sport_day = values(sport_day)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update improve.user
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="telephone != null and telephone != ''">
+                telephone = #{telephone},
+            </if>
+            <if test="userIcon != null and userIcon != ''">
+                user_icon = #{userIcon},
+            </if>
+            <if test="sportTime != null">
+                sport_time = #{sportTime},
+            </if>
+            <if test="sportDay != null">
+                sport_day = #{sportDay},
+            </if>
+        </set>
+        where user_id = #{userId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from improve.user
+        where user_id = #{userId}
+    </delete>
+
+</mapper>

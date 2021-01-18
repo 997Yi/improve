@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gfr.improve.dao.CourseDao">
+
+    <resultMap type="com.gfr.improve.entity.Course" id="CourseMap">
+        <result property="cId" column="c_id" jdbcType="VARCHAR"/>
+        <result property="cName" column="c_name" jdbcType="VARCHAR"/>
+        <result property="cDescribe" column="c_describe" jdbcType="VARCHAR"/>
+        <result property="cVurl" column="c_vurl" jdbcType="VARCHAR"/>
+        <result property="cPurl" column="c_purl" jdbcType="VARCHAR"/>
+        <result property="cTime" column="c_time" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="CourseMap">
+        select c_id,
+               c_name,
+               c_describe,
+               c_vurl,
+               c_purl,
+               c_time
+        from improve.course
+        where c_id = #{cId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="CourseMap">
+        select c_id,
+               c_name,
+               c_describe,
+               c_vurl,
+               c_purl,
+               c_time
+        from improve.course limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="CourseMap">
+        select
+        c_id, c_name, c_describe, c_vurl, c_purl, c_time
+        from improve.course
+        <where>
+            <if test="cId != null and cId != ''">
+                and c_id = #{cId}
+            </if>
+            <if test="cName != null and cName != ''">
+                and c_name = #{cName}
+            </if>
+            <if test="cDescribe != null and cDescribe != ''">
+                and c_describe = #{cDescribe}
+            </if>
+            <if test="cVurl != null and cVurl != ''">
+                and c_vurl = #{cVurl}
+            </if>
+            <if test="cPurl != null and cPurl != ''">
+                and c_purl = #{cPurl}
+            </if>
+            <if test="cTime != null">
+                and c_time = #{cTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="cId" useGeneratedKeys="true">
+        insert into improve.course(c_name, c_describe, c_vurl, c_purl, c_time)
+        values (#{cName}, #{cDescribe}, #{cVurl}, #{cPurl}, #{cTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="cId" useGeneratedKeys="true">
+        insert into improve.course(c_name, c_describe, c_vurl, c_purl, c_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.cName}, #{entity.cDescribe}, #{entity.cVurl}, #{entity.cPurl}, #{entity.cTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="cId" useGeneratedKeys="true">
+        insert into improve.course(c_name, c_describe, c_vurl, c_purl, c_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.cName}, #{entity.cDescribe}, #{entity.cVurl}, #{entity.cPurl}, #{entity.cTime})
+        </foreach>
+        on duplicate key update
+        c_name = values(c_name) , c_describe = values(c_describe) , c_vurl = values(c_vurl) , c_purl = values(c_purl) ,
+        c_time = values(c_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update improve.course
+        <set>
+            <if test="cName != null and cName != ''">
+                c_name = #{cName},
+            </if>
+            <if test="cDescribe != null and cDescribe != ''">
+                c_describe = #{cDescribe},
+            </if>
+            <if test="cVurl != null and cVurl != ''">
+                c_vurl = #{cVurl},
+            </if>
+            <if test="cPurl != null and cPurl != ''">
+                c_purl = #{cPurl},
+            </if>
+            <if test="cTime != null">
+                c_time = #{cTime},
+            </if>
+        </set>
+        where c_id = #{cId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from improve.course
+        where c_id = #{cId}
+    </delete>
+
+</mapper>

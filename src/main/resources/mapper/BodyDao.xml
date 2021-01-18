@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gfr.improve.dao.BodyDao">
+
+    <resultMap type="com.gfr.improve.entity.Body" id="BodyMap">
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="height" column="height" jdbcType="OTHER"/>
+        <result property="weight" column="weight" jdbcType="OTHER"/>
+        <result property="chestCircumference" column="chest_circumference" jdbcType="VARCHAR"/>
+        <result property="waistline" column="waistline" jdbcType="VARCHAR"/>
+        <result property="hipline" column="hipline" jdbcType="VARCHAR"/>
+        <result property="bodyFatRate" column="body_fat_rate" jdbcType="OTHER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="BodyMap">
+        select user_id,
+               height,
+               weight,
+               chest_circumference,
+               waistline,
+               hipline,
+               body_fat_rate
+        from improve.body
+        where user_id = #{userId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="BodyMap">
+        select user_id,
+               height,
+               weight,
+               chest_circumference,
+               waistline,
+               hipline,
+               body_fat_rate
+        from improve.body limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="BodyMap">
+        select
+        user_id, height, weight, chest_circumference, waistline, hipline, body_fat_rate
+        from improve.body
+        <where>
+            <if test="userId != null and userId != ''">
+                and user_id = #{userId}
+            </if>
+            <if test="height != null">
+                and height = #{height}
+            </if>
+            <if test="weight != null">
+                and weight = #{weight}
+            </if>
+            <if test="chestCircumference != null and chestCircumference != ''">
+                and chest_circumference = #{chestCircumference}
+            </if>
+            <if test="waistline != null and waistline != ''">
+                and waistline = #{waistline}
+            </if>
+            <if test="hipline != null and hipline != ''">
+                and hipline = #{hipline}
+            </if>
+            <if test="bodyFatRate != null">
+                and body_fat_rate = #{bodyFatRate}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="userId" useGeneratedKeys="true">
+        insert into improve.body(height, weight, chest_circumference, waistline, hipline, body_fat_rate)
+        values (#{height}, #{weight}, #{chestCircumference}, #{waistline}, #{hipline}, #{bodyFatRate})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into improve.body(height, weight, chest_circumference, waistline, hipline, body_fat_rate)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.height}, #{entity.weight}, #{entity.chestCircumference}, #{entity.waistline}, #{entity.hipline},
+            #{entity.bodyFatRate})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into improve.body(height, weight, chest_circumference, waistline, hipline, body_fat_rate)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.height}, #{entity.weight}, #{entity.chestCircumference}, #{entity.waistline}, #{entity.hipline},
+            #{entity.bodyFatRate})
+        </foreach>
+        on duplicate key update
+        height = values(height) , weight = values(weight) , chest_circumference = values(chest_circumference) ,
+        waistline = values(waistline) , hipline = values(hipline) , body_fat_rate = values(body_fat_rate)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update improve.body
+        <set>
+            <if test="height != null">
+                height = #{height},
+            </if>
+            <if test="weight != null">
+                weight = #{weight},
+            </if>
+            <if test="chestCircumference != null and chestCircumference != ''">
+                chest_circumference = #{chestCircumference},
+            </if>
+            <if test="waistline != null and waistline != ''">
+                waistline = #{waistline},
+            </if>
+            <if test="hipline != null and hipline != ''">
+                hipline = #{hipline},
+            </if>
+            <if test="bodyFatRate != null">
+                body_fat_rate = #{bodyFatRate},
+            </if>
+        </set>
+        where user_id = #{userId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from improve.body
+        where user_id = #{userId}
+    </delete>
+
+</mapper>

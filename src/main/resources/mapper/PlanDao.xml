@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gfr.improve.dao.PlanDao">
+
+    <resultMap type="com.gfr.improve.entity.Plan" id="PlanMap">
+        <result property="palnId" column="paln_id" jdbcType="VARCHAR"/>
+        <result property="planStart" column="plan_start" jdbcType="TIMESTAMP"/>
+        <result property="planEnd" column="plan_end" jdbcType="TIMESTAMP"/>
+        <result property="courseId" column="course_id" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="PlanMap">
+        select paln_id,
+               plan_start,
+               plan_end,
+               course_id
+        from improve.plan
+        where paln_id = #{palnId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="PlanMap">
+        select paln_id,
+               plan_start,
+               plan_end,
+               course_id
+        from improve.plan limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="PlanMap">
+        select
+        paln_id, plan_start, plan_end, course_id
+        from improve.plan
+        <where>
+            <if test="palnId != null and palnId != ''">
+                and paln_id = #{palnId}
+            </if>
+            <if test="planStart != null">
+                and plan_start = #{planStart}
+            </if>
+            <if test="planEnd != null">
+                and plan_end = #{planEnd}
+            </if>
+            <if test="courseId != null and courseId != ''">
+                and course_id = #{courseId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="palnId" useGeneratedKeys="true">
+        insert into improve.plan(plan_start, plan_end, course_id)
+        values (#{planStart}, #{planEnd}, #{courseId})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="palnId" useGeneratedKeys="true">
+        insert into improve.plan(plan_start, plan_end, course_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.planStart}, #{entity.planEnd}, #{entity.courseId})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="palnId" useGeneratedKeys="true">
+        insert into improve.plan(plan_start, plan_end, course_id)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.planStart}, #{entity.planEnd}, #{entity.courseId})
+        </foreach>
+        on duplicate key update
+        plan_start = values(plan_start) , plan_end = values(plan_end) , course_id = values(course_id)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update improve.plan
+        <set>
+            <if test="planStart != null">
+                plan_start = #{planStart},
+            </if>
+            <if test="planEnd != null">
+                plan_end = #{planEnd},
+            </if>
+            <if test="courseId != null and courseId != ''">
+                course_id = #{courseId},
+            </if>
+        </set>
+        where paln_id = #{palnId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from improve.plan
+        where paln_id = #{palnId}
+    </delete>
+
+</mapper>

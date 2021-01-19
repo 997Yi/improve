@@ -148,4 +148,24 @@ public class BodyServiceImpl implements BodyService {
             return new ResponseData(ResponseCode.FAILED);
         }
     }
+
+    @Override
+    @Transactional
+    public ResponseData deleteBodys(List<String> userIdList) {
+        try {
+            int rows = 0;
+            for (String userId : userIdList){
+                rows += bodyDao.deleteById(userId);
+            }
+            if (rows == userIdList.size()) {
+                return new ResponseData(ResponseCode.SUCCESS);
+            }
+            return new ResponseData(ResponseCode.FAILED);
+        }catch (Exception e){
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return new ResponseData(ResponseCode.FAILED);
+        }
+
+    }
 }

@@ -11,6 +11,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * (Body)表控制层
@@ -60,4 +61,11 @@ public class BodyController {
         return bodyService.updateBody(body);
     }
 
+
+    @ApiOperation(value = "deleteUsers", notes = "批量删除身体信息")
+    @ApiImplicitParam(name = "userIdList", value = "用户ID")
+    @DeleteMapping("deleteBodys")
+    public ResponseData deleteBodys(@RequestBody List<String> userIdList){
+        return bodyService.deleteBodys(userIdList);
+    }
 }

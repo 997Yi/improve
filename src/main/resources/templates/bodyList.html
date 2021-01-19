@@ -25,6 +25,12 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 
+<script type="text/html" id="toolbarDemo">
+    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="del">
+        <i class="layui-icon">&#xe640;</i>
+    </button>
+</script>
+
 <!--layui-->
 <script src="layui/layui.js" type="text/javascript"></script>
 <script type="text/javascript">
@@ -43,6 +49,7 @@
             toolbar: '#toolbarDemo', //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
             cols: [
                 [ //表头
+                    {type: 'checkbox', fixed: 'left'},
                     {field: 'userId',title: 'ID',sort: true,fixed: 'left',align: 'center'},
                     {field: 'height',title: '身高（cm）',align: 'center',edit: 'text'},
                     {field: 'weight',title: '体重（kg）',align: 'center',edit: 'text'},
@@ -133,6 +140,42 @@
             });
         })
 
+        table.on('toolbar(test)', function (obj) {
+            //获取选中数据条数
+            const data = table.checkStatus(obj.config.id).data;
+            const event = obj.event;
+
+            if (event === 'del') {
+                if (data.length == 0) {
+                    layer.msg("未选中操作数据");
+                } else {
+                    layer.confirm("确定删除嘛？", function (index) {
+                        var delBodys = new Array();
+                        for (i = 0; i < data.length; i++) {
+                            delBodys[i] = data[i].userId;
+                        }
+                        $.ajax({
+                            method: "DELETE",
+                            url: "body/deleteBodys",
+                            contentType: "application/json",
+                            dataType: "json",
+                            data: JSON.stringify(delBodys),
+                            success: function (res) {
+                                if (res.code == 200) {
+                                    layer.msg(res.msg, {icon: 1});
+                                    layer.close(index);
+                                    location.reload();
+                                } else {
+                                    layer.msg(res.msg, {icon: 2});
+                                }
+                                //请求成功以后的回调函数
+                                console.log("success");
+                            }
+                        })
+                    });
+                }
+            }
+        });
 
     });
 </script>

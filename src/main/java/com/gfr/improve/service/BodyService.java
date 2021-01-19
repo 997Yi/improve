@@ -70,4 +70,11 @@ public interface BodyService {
      * @return
      */
     ResponseData updateBody(Body body);
+
+    /**
+     * 删除Body列表
+     * @param userIdList
+     * @return
+     */
+    ResponseData deleteBodys(List<String> userIdList);
 }

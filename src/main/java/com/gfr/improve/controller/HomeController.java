@@ -95,4 +95,12 @@ public class HomeController {
     public String getBodyList(){
         return "bodyList";
     }
+
+
+    @ApiIgnore
+    @RequestMapping("getUserList")
+    public String getUserList(){
+        return "userList";
+    }
+
 }

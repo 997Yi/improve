@@ -39,9 +39,9 @@ public class UpUtils {
             localPath += "video\\";
             s=s+"video/";
         } else if (originalFilename.endsWith(".jpg") || originalFilename.endsWith(".png") || originalFilename.endsWith(".jpeg")) {
-            realPath = request.getSession().getServletContext().getRealPath("/image/");
-            localPath += "image\\";
-            s=s+"image/";
+            realPath = request.getSession().getServletContext().getRealPath("/img/");
+            localPath += "img\\";
+            s=s+"img/";
         } else if (originalFilename.endsWith(".mp3")) {
             realPath = request.getSession().getServletContext().getRealPath("/audio/");
             localPath += "audio\\";
@@ -64,7 +64,7 @@ public class UpUtils {
         FileOutputStream fos = null;
         FileOutputStream fos1 = null;
         try {
-            //http://localhost:8080/image/a.mp4
+            //http://localhost:8080/img/a.mp4
             // true 表示文件追加   如果为false  则文件夹中永远只有一个文件(最后上传的)
             fos = new FileOutputStream(realPath + originalFilename, true);
             fos.write(file.getBytes());

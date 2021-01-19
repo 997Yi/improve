@@ -1,6 +1,7 @@
 package com.gfr.improve.service;
 
 import com.gfr.improve.entity.User;
+import com.gfr.improve.result.ResponseData;
 
 import java.util.List;
 
@@ -58,4 +59,20 @@ public interface UserService {
      * @return 用户数量
      */
     int queryUserNum();
+
+    /**
+     * 模糊查询
+     * @param value 模糊查询用到的字符串
+     * @param page
+     * @param limit
+     * @return
+     */
+    ResponseData queryByLike(String value, Integer page, Integer limit);
+
+    /**
+     * 更新用户数据
+     * @param user
+     * @return
+     */
+    ResponseData updateUser(User user);
 }

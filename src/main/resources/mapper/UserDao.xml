@@ -69,8 +69,8 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="userId" useGeneratedKeys="true">
-        insert into improve.user(username, password, telephone, user_icon, sport_time, sport_day)
-        values (#{username}, #{password}, #{telephone}, #{userIcon}, #{sportTime}, #{sportDay})
+        insert into improve.user(user_id, username, password)
+        values (uuid(), #{username}, #{password});
     </insert>
 
     <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">
@@ -132,4 +132,50 @@
         from improve.user;
     </select>
 
+    <select id="queryByLike" resultMap="UserMap">
+
+        select
+            user_id,
+            username,
+            password,
+            telephone,
+            user_icon,
+            sport_time,
+            sport_day
+        from improve.user
+        where
+            user.username like concat("%",#{value},"%")
+            limit #{page},#{limit}
+    </select>
+    <select id="countByLike" resultType="java.lang.Integer">
+        select count(user_id) from user
+        where
+            user.username like concat("%",#{value},"%")
+    </select>
+
+
+    <update id="updateUser" parameterType="com.gfr.improve.entity.User">
+        update improve.user
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="telephone != null and telephone != ''">
+                telephone = #{telephone},
+            </if>
+            <if test="userIcon != null and userIcon != ''">
+                user_icon = #{userIcon},
+            </if>
+            <if test="sportTime != null">
+                sport_time = #{sportTime},
+            </if>
+            <if test="sportDay != null">
+                sport_day = #{sportDay},
+            </if>
+        </set>
+        where user_id = #{userId};
+    </update>
 </mapper>

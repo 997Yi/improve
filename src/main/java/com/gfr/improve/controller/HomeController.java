@@ -30,4 +30,10 @@ public class HomeController {
     public String getUserListCourse() {
         return "userList";
     }
+
+    @ApiIgnore
+    @RequestMapping("getBodyList")
+    public String getBodyList(){
+        return "bodyList";
+    }
 }

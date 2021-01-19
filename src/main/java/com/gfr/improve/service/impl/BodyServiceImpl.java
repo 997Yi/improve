@@ -2,8 +2,13 @@ package com.gfr.improve.service.impl;
 
 import com.gfr.improve.dao.BodyDao;
 import com.gfr.improve.entity.Body;
+import com.gfr.improve.entity.User;
+import com.gfr.improve.result.ResponseCode;
+import com.gfr.improve.result.ResponseData;
 import com.gfr.improve.service.BodyService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -38,8 +43,11 @@ public class BodyServiceImpl implements BodyService {
      * @return 对象列表
      */
     @Override
-    public List<Body> queryAllByLimit(int offset, int limit) {
-        return this.bodyDao.queryAllByLimit(offset, limit);
+    public ResponseData queryAllByLimit(int offset, int limit) {
+
+        int num = this.bodyDao.queryCount();
+        List<Body> list = this.bodyDao.queryAllByLimit(offset, limit);
+        return new ResponseData("0", "操作成功", list, num);
     }
 
     /**
@@ -75,5 +83,69 @@ public class BodyServiceImpl implements BodyService {
     @Override
     public boolean deleteById(String userId) {
         return this.bodyDao.deleteById(userId) > 0;
+    }
+
+    @Override
+    public ResponseData queryByLike(String value, Integer page, Integer limit) {
+        if (page != null && limit != null) {
+            page = (page - 1) * limit;
+        } else {
+            page = 0;
+            limit = 10;
+        }
+        Integer i = bodyDao.countByLike(value);
+        List<Body> pics = bodyDao.queryByLike(value, page, limit);
+        return new ResponseData("0", "操作成功", pics, i);
+    }
+
+    @Transactional
+    @Override
+    public ResponseData updateBody(Body body) {
+        try{
+            String field = body.getField();
+            String value = body.getValue();
+            //判断field的类型
+            if(field != null && field != "" && value != null){
+                switch (field){
+                    case "height":
+                        body.setHeight(value);
+                        break;
+                    case "weight":
+                        body.setWeight(value);
+                        break;
+                    case "chestCircumference":
+                        body.setChestCircumference(value);
+                        break;
+                    case "waistline":
+                        body.setWaistline(value);
+                        break;
+                    case "hipline":
+                        body.setHipline(value);
+                        break;
+                    case "bodyFatRate":
+                        body.setBodyFatRate(value);
+                        break;
+
+                }
+
+                int i = this.bodyDao.update(body);
+                if(i>0){
+                    return new ResponseData(ResponseCode.SUCCESS);
+                }else{
+                    return new ResponseData(ResponseCode.FAILED);
+                }
+            }else{
+                int i = this.bodyDao.update(body);
+                if(i>0){
+                    return new ResponseData(ResponseCode.SUCCESS);
+                }else{
+                    return new ResponseData(ResponseCode.FAILED);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return new ResponseData(ResponseCode.FAILED);
+        }
     }
 }

@@ -17,11 +17,11 @@ public class Body implements Serializable {
     /**
      * 身高cm
      */
-    private Object height;
+    private String height;
     /**
      * 体重kg
      */
-    private Object weight;
+    private String weight;
     /**
      * 胸围
      */
@@ -37,7 +37,29 @@ public class Body implements Serializable {
     /**
      * 体脂肪率%
      */
-    private Object bodyFatRate;
+    private String bodyFatRate;
+
+    private String value;
+
+    private String field;
+
+    public String getField() {
+        return field;
+    }
+
+    public void setField(String field) {
+        this.field = field;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+
 
 
     public String getUserId() {
@@ -48,19 +70,19 @@ public class Body implements Serializable {
         this.userId = userId;
     }
 
-    public Object getHeight() {
+    public String getHeight() {
         return height;
     }
 
-    public void setHeight(Object height) {
+    public void setHeight(String height) {
         this.height = height;
     }
 
-    public Object getWeight() {
+    public String getWeight() {
         return weight;
     }
 
-    public void setWeight(Object weight) {
+    public void setWeight(String weight) {
         this.weight = weight;
     }
 
@@ -88,11 +110,11 @@ public class Body implements Serializable {
         this.hipline = hipline;
     }
 
-    public Object getBodyFatRate() {
+    public String getBodyFatRate() {
         return bodyFatRate;
     }
 
-    public void setBodyFatRate(Object bodyFatRate) {
+    public void setBodyFatRate(String bodyFatRate) {
         this.bodyFatRate = bodyFatRate;
     }
 

@@ -50,4 +50,11 @@ public class UserController {
     public ResponseData deleteById(@PathVariable("userId") String userId){
         return new ResponseData(ResponseCode.SUCCESS, userService.deleteById(userId));
     }
+
+    @ApiOperation(value = "queryByLike",notes = "模糊查询")
+    @ApiImplicitParam(name = "value",value = "类型,标题")
+    @GetMapping("queryByLike")
+    public  ResponseData queryByLike(String value,Integer page,Integer limit){
+        return userService.queryByLike(value, page, limit);
+    }
 }

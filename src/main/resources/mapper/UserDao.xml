@@ -132,4 +132,24 @@
         from improve.user;
     </select>
 
+    <select id="queryByLike" resultMap="UserMap">
+
+        select
+            user_id,
+            username,
+            password,
+            telephone,
+            user_icon,
+            sport_time,
+            sport_day
+        from improve.user
+        where
+            user.username like concat("%",#{value},"%")
+            limit #{page},#{limit}
+    </select>
+    <select id="countByLike" resultType="java.lang.Integer">
+        select count(user_id) from user
+        where
+            user.username like concat("%",#{value},"%")
+    </select>
 </mapper>

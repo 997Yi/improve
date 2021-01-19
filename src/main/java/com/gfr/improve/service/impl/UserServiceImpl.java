@@ -2,6 +2,7 @@ package com.gfr.improve.service.impl;
 
 import com.gfr.improve.dao.UserDao;
 import com.gfr.improve.entity.User;
+import com.gfr.improve.result.ResponseData;
 import com.gfr.improve.service.UserService;
 import org.springframework.stereotype.Service;
 
@@ -83,5 +84,26 @@ public class UserServiceImpl implements UserService {
      */
     public int queryUserNum(){
         return this.userDao.queryUserNum();
+    }
+
+
+    /**
+     * 模糊查询
+     * @param value 模糊查询用到的字符串
+     * @param page
+     * @param limit
+     * @return
+     */
+    @Override
+    public ResponseData queryByLike(String value, Integer page, Integer limit) {
+        if(page != null && limit != null){
+            page = (page-1)*limit;
+        }else{
+            page = 0;
+            limit = 10;
+        }
+        Integer i =  userDao.countByLike(value);
+        List<User> pics =  userDao.queryByLike(value,page, limit);
+        return new ResponseData("0","操作成功",pics,i);
     }
 }

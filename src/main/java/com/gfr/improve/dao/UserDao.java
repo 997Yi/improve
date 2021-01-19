@@ -86,4 +86,20 @@ public interface UserDao {
      */
     int queryUserNum();
 
+    /**
+     * 模糊查询
+     * @param value
+     * @param page
+     * @param limit
+     * @return
+     */
+    List<User> queryByLike(String value, Integer page, Integer limit);
+
+    /**
+     * 模糊查询的结果数量
+     * @param value
+     * @return
+     */
+    int countByLike(String value);
+
 }

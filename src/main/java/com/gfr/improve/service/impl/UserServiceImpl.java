@@ -2,9 +2,11 @@ package com.gfr.improve.service.impl;
 
 import com.gfr.improve.dao.UserDao;
 import com.gfr.improve.entity.User;
+import com.gfr.improve.result.ResponseCode;
 import com.gfr.improve.result.ResponseData;
 import com.gfr.improve.service.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -80,15 +82,17 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 查询用户数量
+     *
      * @return 用户数量
      */
-    public int queryUserNum(){
+    public int queryUserNum() {
         return this.userDao.queryUserNum();
     }
 
 
     /**
      * 模糊查询
+     *
      * @param value 模糊查询用到的字符串
      * @param page
      * @param limit
@@ -96,14 +100,30 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public ResponseData queryByLike(String value, Integer page, Integer limit) {
-        if(page != null && limit != null){
-            page = (page-1)*limit;
-        }else{
+        if (page != null && limit != null) {
+            page = (page - 1) * limit;
+        } else {
             page = 0;
             limit = 10;
         }
-        Integer i =  userDao.countByLike(value);
-        List<User> pics =  userDao.queryByLike(value,page, limit);
-        return new ResponseData("0","操作成功",pics,i);
+        Integer i = userDao.countByLike(value);
+        List<User> pics = userDao.queryByLike(value, page, limit);
+        return new ResponseData("0", "操作成功", pics, i);
+    }
+
+    @Override
+    public ResponseData updateUser(User user) {
+        String username = user.getUsername();
+        //判断field的类型
+        if (username != null && username != "") {
+            int i = this.userDao.update(user);
+            if (i > 0) {
+                return new ResponseData(ResponseCode.SUCCESS);
+            } else {
+                return new ResponseData(ResponseCode.FAILED);
+            }
+        } else {
+            return new ResponseData(ResponseCode.FAILED);
+        }
     }
 }

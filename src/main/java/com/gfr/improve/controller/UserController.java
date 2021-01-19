@@ -57,4 +57,11 @@ public class UserController {
     public  ResponseData queryByLike(String value,Integer page,Integer limit){
         return userService.queryByLike(value, page, limit);
     }
+
+    @ApiOperation(value = "updateUser", notes = "更新用户")
+    @ApiImplicitParam(name = "user", value = "用户")
+    @PatchMapping("updateUser")
+    public  ResponseData updateUser(@RequestBody User user){
+        return userService.updateUser(user);
+    }
 }

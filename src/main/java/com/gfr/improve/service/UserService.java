@@ -68,4 +68,11 @@ public interface UserService {
      * @return
      */
     ResponseData queryByLike(String value, Integer page, Integer limit);
+
+    /**
+     * 更新用户数据
+     * @param user
+     * @return
+     */
+    ResponseData updateUser(User user);
 }

@@ -152,4 +152,30 @@
         where
             user.username like concat("%",#{value},"%")
     </select>
+
+
+    <update id="updateUser" parameterType="com.gfr.improve.entity.User">
+        update improve.user
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="telephone != null and telephone != ''">
+                telephone = #{telephone},
+            </if>
+            <if test="userIcon != null and userIcon != ''">
+                user_icon = #{userIcon},
+            </if>
+            <if test="sportTime != null">
+                sport_time = #{sportTime},
+            </if>
+            <if test="sportDay != null">
+                sport_day = #{sportDay},
+            </if>
+        </set>
+        where user_id = #{userId};
+    </update>
 </mapper>

@@ -102,4 +102,11 @@ public interface UserDao {
      */
     int countByLike(String value);
 
+    /**
+     * 更新用户
+     * @param user
+     * @return
+     */
+    int updateUser(User user);
+
 }

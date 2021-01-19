@@ -24,7 +24,7 @@
     <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     </script>
-    <!--自定义头部工具栏-->
+
     <script type="text/html" id="toolbarDemo">
         <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="del">
             <i class="layui-icon">&#xe640;</i>
@@ -43,26 +43,27 @@
             var tableIns = table.render({
                 elem: '#demo',
                 height: 600,
-                url: 'http://localhost:8080/user/queryAll', //数据接口
+                url: 'user/queryAll', //数据接口
                 title: '用户表',
                 page: true, //开启分页
                 toolbar: '#toolbarDemo', //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
                 cols: [
                     [ //表头
-                        {type: 'checkbox',fixed: 'left'},
-                        {field: 'userId',title: 'ID',sort: true,fixed: 'left',align: 'center'},
-                        {field: 'username',title: '用户名',align: 'center',edit: 'text'},
-                        {field: 'userIcon',title: '头像',align: 'center'
+                        {type: 'checkbox', fixed: 'left'},
+                        {field: 'userId', title: 'ID', sort: true, fixed: 'left', align: 'center'},
+                        {field: 'username', title: '用户名', align: 'center', edit: 'text'},
+                        {
+                            field: 'userIcon', title: '头像', align: 'center'
                             ,
                             templet: function (res) {
-                                return '<img src="/image/' + res.userIcon + '" width="100px" height="100px"/>';
+                                return res.userIcon == null ? "NULL" : '<img src="/img/' + res.userIcon + '" width="100px" height="100px"/>';
                             },
                             width: 100
                         },
-                        {field: 'telephone',title: '电话',align: 'center',edit: 'text'},
-                        {field: 'sportTime',title: '运动总时长',align: 'center'},
-                        {field: 'sportDay',title: '运动天数',align: 'center'},
-                        {fixed: 'right',title: '操作',width: 165,align: 'center',toolbar: '#barDemo'}
+                        {field: 'telephone', title: '电话', align: 'center', edit: 'text'},
+                        {field: 'sportTime', title: '运动总时长', align: 'center'},
+                        {field: 'sportDay', title: '运动天数', align: 'center'},
+                        {fixed: 'right', title: '操作', width: 165, align: 'center', toolbar: '#barDemo'}
                     ]
                 ],
                 text: {
@@ -73,25 +74,24 @@
             //监听单元格编辑(单元格在线编辑)
             table.on('edit(test)', function (obj) {  //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
                 var value = obj.value //得到修改后的值
-                    ,data = obj.data //得到所在行所有键值
-                    ,field = obj.field; //得到字段
+                    , data = obj.data //得到所在行所有键值
 
                 //向服务器发送请求进行修改操作
                 $.ajax({
                     type: "PATCH",
-                    url: "course/updateCourse",
+                    url: "user/updateUser",
                     dataType: "json",
                     contentType: "application/json",
                     data: JSON.stringify({
-                        'field': field,
-                        'value': value,
-                        'cId': data.pId
+                        'username': value,
+                        'userId': data.userId
                     }),
                     success: function (res) {
                         if (res.code == 200) {
                             layer.msg(res.msg, {icon: 1});
                         } else {
                             layer.msg(res.msg, {icon: 2});
+                            location.reload();
                         }
                         //请求成功以后的回调函数
                         console.log("success");
@@ -111,7 +111,7 @@
                         //向服务端发送删除指令
                         $.ajax({
                             type: "DELETE",
-                            url: "course/deleteCourse/" + data.cId,
+                            url: "user/deleteById/" + data.userId,
                             contentType: "application/json",
                             dataType: "json",
                             success: function (res) {
@@ -135,7 +135,7 @@
             $("#search").on('click', function () {
                 //这里以搜索为例
                 tableIns.reload({
-                    url: "course/queryByLike",
+                    url: "user/queryByLike",
                     where: { //设定异步数据接口的额外参数，任意设
                         value: $("#conditions").val()
                     }
@@ -146,7 +146,43 @@
             })
 
 
-        });
+            table.on('toolbar(test)', function (obj) {
+                //获取选中数据条数
+                const data = table.checkStatus(obj.config.id).data;
+                const event = obj.event;
+
+                if (event === 'del') {
+                    if (data.length == 0) {
+                        layer.msg("未选中操作数据");
+                    } else {
+                        layer.confirm("确定删除嘛？", function (index) {
+                            var delUsers = new Array();
+                            for (i = 0; i < data.length; i++) {
+                                delUsers[i] = data[i].userId;
+                            }
+                            $.ajax({
+                                method: "DELETE",
+                                url: "user/deleteUsers",
+                                contentType: "application/json",
+                                dataType: "json",
+                                data: JSON.stringify(delUsers),
+                                success: function (res) {
+                                    if (res.code == 200) {
+                                        layer.msg(res.msg, {icon: 1});
+                                        layer.close(index);
+                                        location.reload();
+                                    } else {
+                                        layer.msg(res.msg, {icon: 2});
+                                    }
+                                    //请求成功以后的回调函数
+                                    console.log("success");
+                                }
+                            })
+                        });
+                    }
+                }
+            });
+        })
     </script>
 </body>
 

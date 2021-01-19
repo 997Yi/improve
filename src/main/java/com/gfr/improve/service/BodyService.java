@@ -1,6 +1,8 @@
 package com.gfr.improve.service;
 
 import com.gfr.improve.entity.Body;
+import com.gfr.improve.entity.User;
+import com.gfr.improve.result.ResponseData;
 
 import java.util.List;
 
@@ -27,7 +29,7 @@ public interface BodyService {
      * @param limit  查询条数
      * @return 对象列表
      */
-    List<Body> queryAllByLimit(int offset, int limit);
+    ResponseData queryAllByLimit(int offset, int limit);
 
     /**
      * 新增数据
@@ -53,4 +55,26 @@ public interface BodyService {
      */
     boolean deleteById(String userId);
 
+    /**
+     * 模糊查询
+     * @param value
+     * @param page
+     * @param limit
+     * @return
+     */
+    ResponseData queryByLike(String value, Integer page, Integer limit);
+
+    /**
+     * 更新用户数据
+     * @param body
+     * @return
+     */
+    ResponseData updateBody(Body body);
+
+    /**
+     * 删除Body列表
+     * @param userIdList
+     * @return
+     */
+    ResponseData deleteBodys(List<String> userIdList);
 }

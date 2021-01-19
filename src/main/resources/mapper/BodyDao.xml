@@ -127,4 +127,54 @@
         where user_id = #{userId}
     </delete>
 
+    <select id="queryCount" resultType="java.lang.Integer">
+        select count(user_id)
+        from improve.body
+    </select>
+
+    <select id="queryByLike" resultMap="BodyMap">
+        select user_id,
+               height,
+               weight,
+               chest_circumference,
+               waistline,
+               hipline,
+               body_fat_rate
+        from improve.body
+        where
+            body.user_id like concat("%",#{value},"%")
+            limit #{page},#{limit}
+    </select>
+    <select id="countByLike" resultType="java.lang.Integer">
+        select count(user_id) from body
+        where
+            body.user_id like concat("%",#{value},"%")
+    </select>
+
+    <!--通过主键修改数据-->
+    <update id="updateBody">
+        update improve.body
+        <set>
+            <if test="height != null">
+                height = #{height},
+            </if>
+            <if test="weight != null">
+                weight = #{weight},
+            </if>
+            <if test="chestCircumference != null and chestCircumference != ''">
+                chest_circumference = #{chestCircumference},
+            </if>
+            <if test="waistline != null and waistline != ''">
+                waistline = #{waistline},
+            </if>
+            <if test="hipline != null and hipline != ''">
+                hipline = #{hipline},
+            </if>
+            <if test="bodyFatRate != null">
+                body_fat_rate = #{bodyFatRate},
+            </if>
+        </set>
+        where user_id = #{userId}
+    </update>
+
 </mapper>

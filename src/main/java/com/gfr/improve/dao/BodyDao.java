@@ -1,6 +1,7 @@
 package com.gfr.improve.dao;
 
 import com.gfr.improve.entity.Body;
+import com.gfr.improve.entity.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -79,4 +80,32 @@ public interface BodyDao {
      */
     int deleteById(String userId);
 
+    /**
+     * 查询数量
+     * @return
+     */
+    int queryCount();
+
+    /**
+     * 模糊查询
+     * @param value
+     * @param page
+     * @param limit
+     * @return
+     */
+    List<Body> queryByLike(String value, Integer page, Integer limit);
+
+    /**
+     * 模糊查询的结果数量
+     * @param value
+     * @return
+     */
+    int countByLike(String value);
+
+    /**
+     * 更新body
+     * @param body
+     * @return
+     */
+    int updateBody(Body body);
 }

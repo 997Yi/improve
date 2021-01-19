@@ -1,5 +1,6 @@
 package com.gfr.improve.controller;
 
+import com.fasterxml.jackson.databind.deser.impl.NullsAsEmptyProvider;
 import com.gfr.improve.entity.User;
 import com.gfr.improve.result.ResponseCode;
 import com.gfr.improve.result.ResponseData;
@@ -8,10 +9,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.annotation.Resource;
@@ -44,5 +42,33 @@ public class UserController {
     @GetMapping("queryAll")
     public ResponseData queryAll(int page, int limit){
         return new ResponseData("0", "操作成功", userService.queryAllByLimit((page-1)*limit, limit), userService.queryUserNum());
+    }
+
+    @ApiOperation(value = "deleteById", notes = "删除对应id的用户")
+    @ApiImplicitParam(name = "userId", value = "需要删除的用户id")
+    @DeleteMapping("deleteById/{userId}")
+    public ResponseData deleteById(@PathVariable("userId") String userId){
+        return new ResponseData(ResponseCode.SUCCESS, userService.deleteById(userId));
+    }
+
+    @ApiOperation(value = "queryByLike",notes = "模糊查询")
+    @ApiImplicitParam(name = "value",value = "类型,标题")
+    @GetMapping("queryByLike")
+    public  ResponseData queryByLike(String value,Integer page,Integer limit){
+        return userService.queryByLike(value, page, limit);
+    }
+
+    @ApiOperation(value = "updateUser", notes = "更新用户")
+    @ApiImplicitParam(name = "user", value = "用户")
+    @PatchMapping("updateUser")
+    public  ResponseData updateUser(@RequestBody User user){
+        return userService.updateUser(user);
+    }
+
+    @ApiOperation(value = "deleteUsers", notes = "批量删除用户")
+    @ApiImplicitParam(name = "userIdList", value = "用户ID")
+    @DeleteMapping("deleteUsers")
+    public ResponseData deleteUsers(@RequestBody List<String> userIdList){
+        return userService.deleteUsers(userIdList);
     }
 }

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <style>
+        #time{
+            width: 500px;
+            height: 557px;
+        }
+        .selectTime, #myButton{
+            width: 272px;
+            margin: 40px auto 20px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="layui-inline" id="time"> <!-- 注意：这一层元素并不是必须的 -->
+    <form action="" class="layui-form" id="formDemo" method="PUT">
+        <input name="planStart" type="text" class="layui-input selectTime" id="time1" value="" th:value="${#dates.format(session.plan.planStart, 'yyyy-MM-dd')}">
+        <input name="planEnd" type="text" class="layui-input selectTime" id="time2" value="" th:value="${#dates.format(session.plan.planEnd, 'yyyy-MM-dd')}">
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="width: 272px; margin: 40px auto 20px">
+                <select name="courseId" lay-verify="required">
+                    <option value="" th:value="${session.plan.courseId}" th:text="${session.course.cName}"></option>
+                    <option value="" th:each="cou : ${session.courses}" th:text="${cou.cName}" th:value="${cou.cId}"></option>
+                </select>
+            </div>
+        </div>
+        <button class="layui-btn" id="myButton" lay-submit lay-filter="formDemo">立即提交</button>
+    </form>
+</div>
+
+<script src="layui/layui.js"></script>
+<script th:inline="javascript">
+    layui.use(['laydate', 'form'], function(){
+        var laydate = layui.laydate,
+            form = layui.form;
+
+        laydate.render({
+           elem: '#time1',
+           type: 'date',
+           format: 'yyyy-MM-dd'
+        });
+        laydate.render({
+           elem: '#time2',
+           type: 'date',
+           format: 'yyyy-MM-dd'
+        });
+
+        form.on('submit(formDemo)', function(data){
+            var planId = /*[[${session.plan.planId}]]*/ '';
+            layui.jquery.ajax({
+                type: 'PUT',
+                url: "plan/modPlan/",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify({
+                    'planId': planId,
+                    'planStart': data.field.planStart,
+                    'planEnd': data.field.planEnd,
+                    'courseId': data.field.courseId
+                }),
+                success: function (res) {
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    parent.layer.close(index); //再执行关闭
+                },
+                error: function (res){
+                    layer.msg("修改失败！");
+                }
+
+            });
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

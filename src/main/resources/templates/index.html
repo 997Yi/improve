@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Improve - 后台管理</title>
-    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="../static/layui/css/layui.css" th:href="@{/layui/css/layui.css}">
 </head>
 
 <body class="layui-layout-body">
@@ -17,7 +17,7 @@
         <ul class="layui-nav layui-layout-right">
             <li class="layui-nav-item">
                 <a href="javascript:;">
-                    <img src="http://t.cn/RCzsdCq" class="layui-nav-img"> 贤心
+                    <img src="../static/img/default.png" class="layui-nav-img" th:src="@{/img/default.png}"> 贤心
                 </a>
                 <dl class="layui-nav-child">
                     <dd>
@@ -43,6 +43,7 @@
                     <a class="" href="javascript:;">用户Body信息管理</a>
                     <dl class="layui-nav-child">
                         <dd>
+                            <a href="javascript:;" target="ifr">body信息</a>
                             <a href="/getBodyList" target="ifr">Body信息</a>
                         </dd>
                     </dl>
@@ -63,10 +64,10 @@
                 </li>
 
                 <li class="layui-nav-item">
-                    <a class="" href="javascript:;">每日计划管理</a>
+                    <a class="" href="/getPlanDetail" target="ifr">每日计划管理</a>
                     <dl class="layui-nav-child">
                         <dd>
-                            <a href="javascript:;">每日计划信息</a>
+                            <a href="/getPlanDetail" target="ifr">每日计划信息</a>
                         </dd>
                     </dl>
                 </li>
@@ -90,7 +91,7 @@
         <iframe name="ifr" src="" width="100%" height="100%"></iframe>
     </div>
 </div>
-<script src="layui/layui.js"></script>
+<script src="../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
 <script>
     //JavaScript代码区域
     layui.use('element', function () {

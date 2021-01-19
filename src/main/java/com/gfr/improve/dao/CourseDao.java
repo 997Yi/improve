@@ -79,4 +79,26 @@ public interface CourseDao {
      */
     int deleteById(String cId);
 
+    /**
+     * 计算数据总数
+     * @return
+     */
+    Integer count();
+
+
+    /**
+     * 模糊查询
+     * @param value
+     * @param offset
+     * @param limit
+     * @return
+     */
+    List<Course> queryByLike(String value, Integer offset, Integer limit);
+
+    /**
+     * 模糊查询数据量
+     * @param value
+     * @return
+     */
+    Integer countByLike(String value);
 }

@@ -25,8 +25,9 @@
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
 </script>
 <!--自定义头部工具栏-->
-<script type="text/html" id="toolbarDemo">
-    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="del">
+<script type="text/html" id="toolbarDemo" class="demoTable">
+    <button type="button" data-type="getCheckData" class="layui-btn layui-btn-primary layui-btn-sm" id="btn"
+            lay-event="del">
         <i class="layui-icon">&#xe640;</i>
     </button>
 </script>
@@ -34,14 +35,13 @@
 <script type="text/javascript">
     layui.use(['table', 'form'], function () {
         var table = layui.table,
-            form = layui.form,
             $ = layui.jquery;
 
         //执行一个 table 实例
         var tableIns = table.render({
             elem: '#demo',
             height: 600,
-            url: 'course/queryAll' //数据接口
+            url: 'course/queryAllByLimit' //数据接口
             ,
             title: '用户表',
             page: true //开启分页
@@ -54,37 +54,43 @@
                         type: 'checkbox',
                         fixed: 'left'
                     }, {
-                    field: 'cId',
+                    field: 'cid',
                     title: 'ID',
                     sort: true,
                     fixed: 'left',
                     align: 'center'
                 }, {
-                    field: 'cName',
+                    field: 'cname',
                     title: '名称',
                     align: 'center',
                     edit: 'text'
                 }, {
-                    field: 'cDescribe',
+                    field: 'ckeyword',
+                    title: '关键字',
+                    align: 'center',
+                    edit: 'text'
+                }
+                , {
+                    field: 'cdescribe',
                     title: '描述',
                     align: 'center',
                     edit: 'text'
                 }, {
-                    field: 'cPurl',
+                    field: 'cpurl',
                     title: '图片',
                     align: 'center',
                     templet: function (res) {
-                        return '<img src="' + res.url + '" />';
+                        return '<img src="' + res.cpurl + '" />';
                     }
                 }, {
-                    field: 'cVurl',
+                    field: 'cvurl',
                     title: '视频',
                     align: 'center',
                     templet: function (res) {
-                        return '<vedio src="' + res.url + '" />';
+                        return '<video autoplay="autoplay"> <source src="'+res.cvurl+'" type="video/mp4"/> </video>';
                     }
                 }, {
-                    field: 'cTime',
+                    field: 'ctime',
                     title: '时间',
                     align: 'center',
                     edit: 'text'
@@ -99,24 +105,18 @@
             ]
         });
 
-
         //监听单元格编辑(单元格在线编辑)
         table.on('edit(test)', function (obj) {  //注：edit是固定事件名，test是table原始容器的属性 lay-filter="对应的值"
             var value = obj.value //得到修改后的值
                 , data = obj.data //得到所在行所有键值
                 , field = obj.field; //得到字段
-
             //向服务器发送请求进行修改操作
             $.ajax({
                 type: "PATCH",
                 url: "course/updateCourse",
                 dataType: "json",
                 contentType: "application/json",
-                data: JSON.stringify({
-                    'field': field,
-                    'value': value,
-                    'cId': data.pId
-                }),
+                data: JSON.stringify(data),
                 success: function (res) {
                     if (res.code == 200) {
                         layer.msg(res.msg, {icon: 1});
@@ -127,7 +127,7 @@
                     console.log("success");
                 },
                 error: function () {
-
+                    layer.msg("error", {icon: 2});
                 }
             })
         });
@@ -141,7 +141,7 @@
                     //向服务端发送删除指令
                     $.ajax({
                         type: "DELETE",
-                        url: "course/deleteCourse/" + data.cId,
+                        url: "course/deleteCourse/" + data.cid,
                         contentType: "application/json",
                         dataType: "json",
                         success: function (res) {
@@ -160,6 +160,7 @@
             }
         });
 
+
         //table重载
         //自定义点击事件
         $("#search").on('click', function () {
@@ -175,6 +176,38 @@
             });
         })
 
+
+        //监听复选框操作
+        $("#btn").on('click', function () {
+            var checkStatus = table.checkStatus('demo')
+                , data = checkStatus.data;
+            var cids="";
+            for (var i = 0; i < data.length; i++) {
+                cids += data[i].cid+"@";
+            }
+            $.ajax({
+                type: "DELETE",
+                url: "course/deleteCourseList",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(cids),
+                success: function (res) {
+                    if (res.code == 200) {
+                        layer.msg(res.msg, {icon: 1});
+                        //重新加载表
+                        tableIns.reload({
+                            page: {
+                                curr: 1 //重新从第 1 页开始
+                            }
+                        });
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                    //请求成功以后的回调函数
+                    console.log("success");
+                }
+            })
+        });
 
     });
 </script>

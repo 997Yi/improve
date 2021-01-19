@@ -8,8 +8,43 @@
         <result property="cDescribe" column="c_describe" jdbcType="VARCHAR"/>
         <result property="cVurl" column="c_vurl" jdbcType="VARCHAR"/>
         <result property="cPurl" column="c_purl" jdbcType="VARCHAR"/>
+        <result property="cKeyword" column="c_keyword" jdbcType="VARCHAR"/>
         <result property="cTime" column="c_time" jdbcType="INTEGER"/>
     </resultMap>
+
+    <!--    sql语句-->
+    <sql id="courseSql">
+        c_id,c_name,c_describe,c_vurl,c_purl,c_time,c_keyword
+    </sql>
+
+    <!--    模糊查询数据量-->
+    <select id="countByLike" resultType="java.lang.Integer">
+        select count(c_id) from course
+        where
+        c_name like concat("%",#{value},"%")
+        or
+        c_describe like concat("%",#{value},"%")
+        or
+        c_keyword like concat("%",#{value},"%")
+    </select>
+
+    <!--    模糊查询-->
+    <select id="queryByLike" resultMap="CourseMap">
+        select <include refid="courseSql"/> from course
+        where
+        c_name like concat("%",#{value},"%")
+        or
+        c_describe like concat("%",#{value},"%")
+        or
+        c_keyword like concat("%",#{value},"%")
+    </select>
+
+
+    <!--获取数据量-->
+    <select id="count" resultType="java.lang.Integer">
+        select count(c_id)
+        from course
+    </select>
 
     <!--查询单个-->
     <select id="queryById" resultMap="CourseMap">
@@ -18,7 +53,8 @@
                c_describe,
                c_vurl,
                c_purl,
-               c_time
+               c_time,
+               c_keyword
         from improve.course
         where c_id = #{cId}
     </select>
@@ -30,14 +66,15 @@
                c_describe,
                c_vurl,
                c_purl,
-               c_time
+               c_time,
+               c_keyword
         from improve.course limit #{offset}, #{limit}
     </select>
 
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="CourseMap">
         select
-        c_id, c_name, c_describe, c_vurl, c_purl, c_time
+        c_id, c_name, c_describe, c_vurl, c_purl, c_time,c_keyword
         from improve.course
         <where>
             <if test="cId != null and cId != ''">
@@ -58,32 +95,38 @@
             <if test="cTime != null">
                 and c_time = #{cTime}
             </if>
+            <if test="cKeyword != null and cKeyword != ''">
+                and c_keyword = #{cKeyword}
+            </if>
         </where>
     </select>
 
     <!--新增所有列-->
-    <insert id="insert" keyProperty="cId" useGeneratedKeys="true">
-        insert into improve.course(c_name, c_describe, c_vurl, c_purl, c_time)
-        values (#{cName}, #{cDescribe}, #{cVurl}, #{cPurl}, #{cTime})
+    <insert id="insert" >
+        <selectKey keyProperty="cId" resultType="String" order="BEFORE">
+            select uuid();
+        </selectKey>
+        insert into improve.course(c_id,c_name, c_describe, c_vurl, c_purl, c_time,c_keyword)
+        values (#{cId},#{cName}, #{cDescribe}, #{cVurl}, #{cPurl}, #{cTime},#{cKeyword})
     </insert>
 
     <insert id="insertBatch" keyProperty="cId" useGeneratedKeys="true">
-        insert into improve.course(c_name, c_describe, c_vurl, c_purl, c_time)
+        insert into improve.course(c_name, c_describe, c_vurl, c_purl, c_time,c_keyword)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.cName}, #{entity.cDescribe}, #{entity.cVurl}, #{entity.cPurl}, #{entity.cTime})
+            (#{entity.cName}, #{entity.cDescribe}, #{entity.cVurl}, #{entity.cPurl}, #{entity.cTime},#{entity.cKeyword})
         </foreach>
     </insert>
 
     <insert id="insertOrUpdateBatch" keyProperty="cId" useGeneratedKeys="true">
-        insert into improve.course(c_name, c_describe, c_vurl, c_purl, c_time)
+        insert into improve.course(c_name, c_describe, c_vurl, c_purl, c_time,c_keyword)
         values
         <foreach collection="entities" item="entity" separator=",">
-            (#{entity.cName}, #{entity.cDescribe}, #{entity.cVurl}, #{entity.cPurl}, #{entity.cTime})
+            (#{entity.cName}, #{entity.cDescribe}, #{entity.cVurl}, #{entity.cPurl}, #{entity.cTime},#{entity.cKeyword})
         </foreach>
         on duplicate key update
         c_name = values(c_name) , c_describe = values(c_describe) , c_vurl = values(c_vurl) , c_purl = values(c_purl) ,
-        c_time = values(c_time)
+        c_time = values(c_time),c_keyword=values (c_keyword)
     </insert>
 
     <!--通过主键修改数据-->
@@ -104,6 +147,9 @@
             </if>
             <if test="cTime != null">
                 c_time = #{cTime},
+            </if>
+            <if test="cKeyword != null and cKeyword != ''">
+                c_keyword = #{cKeyword},
             </if>
         </set>
         where c_id = #{cId}

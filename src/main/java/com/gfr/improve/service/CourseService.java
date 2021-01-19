@@ -1,6 +1,7 @@
 package com.gfr.improve.service;
 
 import com.gfr.improve.entity.Course;
+import com.gfr.improve.result.ResponseData;
 
 import java.util.List;
 
@@ -27,7 +28,7 @@ public interface CourseService {
      * @param limit  查询条数
      * @return 对象列表
      */
-    List<Course> queryAllByLimit(int offset, int limit);
+    ResponseData queryAllByLimit(Integer offset, Integer limit);
 
     /**
      * 新增数据
@@ -35,7 +36,7 @@ public interface CourseService {
      * @param course 实例对象
      * @return 实例对象
      */
-    Course insert(Course course);
+    ResponseData insert(Course course);
 
     /**
      * 修改数据
@@ -43,7 +44,7 @@ public interface CourseService {
      * @param course 实例对象
      * @return 实例对象
      */
-    Course update(Course course);
+    ResponseData update(Course course);
 
     /**
      * 通过主键删除数据
@@ -51,6 +52,21 @@ public interface CourseService {
      * @param cId 主键
      * @return 是否成功
      */
-    boolean deleteById(String cId);
+    ResponseData deleteById(String cId);
 
+    /**
+     * 模糊查询
+     * @param value
+     * @param page
+     * @param limit
+     * @return
+     */
+    ResponseData queryByLike(String value, Integer page, Integer limit);
+
+    /**
+     * 增加课程
+     * @param courses
+     * @return
+     */
+    ResponseData deleteCourseList(String courses);
 }

@@ -23,6 +23,15 @@ public class Course implements Serializable {
 
     private Integer cTime;
 
+    private String cKeyword;
+
+    public String getcKeyword() {
+        return cKeyword;
+    }
+
+    public void setcKeyword(String cKeyword) {
+        this.cKeyword = cKeyword;
+    }
 
     public String getCId() {
         return cId;

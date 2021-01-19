@@ -69,8 +69,8 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="userId" useGeneratedKeys="true">
-        insert into improve.user(username, password, telephone, user_icon, sport_time, sport_day)
-        values (#{username}, #{password}, #{telephone}, #{userIcon}, #{sportTime}, #{sportDay})
+        insert into improve.user(user_id, username, password)
+        values (uuid(), #{username}, #{password});
     </insert>
 
     <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">

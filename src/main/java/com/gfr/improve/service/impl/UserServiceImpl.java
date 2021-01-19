@@ -5,6 +5,7 @@ import com.gfr.improve.entity.User;
 import com.gfr.improve.result.ResponseCode;
 import com.gfr.improve.result.ResponseData;
 import com.gfr.improve.service.UserService;
+import com.gfr.improve.util.EncryptionUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
@@ -53,6 +54,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User insert(User user) {
+        user.setPassword(EncryptionUtil.Encryption(user.getPassword()));
         this.userDao.insert(user);
         return user;
     }

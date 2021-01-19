@@ -75,4 +75,11 @@ public interface UserService {
      * @return
      */
     ResponseData updateUser(User user);
+
+    /**
+     * 删除用户列表
+     * @param userIdList
+     * @return
+     */
+    ResponseData deleteUsers(List<String> userIdList);
 }

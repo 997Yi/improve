@@ -7,6 +7,7 @@ import com.gfr.improve.result.ResponseData;
 import com.gfr.improve.service.UserService;
 import com.gfr.improve.util.EncryptionUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.annotation.Resource;
@@ -127,5 +128,25 @@ public class UserServiceImpl implements UserService {
         } else {
             return new ResponseData(ResponseCode.FAILED);
         }
+    }
+
+    @Override
+    @Transactional
+    public ResponseData deleteUsers(List<String> userIdList) {
+        try {
+            int rows = 0;
+            for (String userId : userIdList){
+                rows += userDao.deleteById(userId);
+            }
+            if (rows == userIdList.size()) {
+                return new ResponseData(ResponseCode.SUCCESS);
+            }
+            return new ResponseData(ResponseCode.FAILED);
+        }catch (Exception e){
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return new ResponseData(ResponseCode.FAILED);
+        }
+
     }
 }

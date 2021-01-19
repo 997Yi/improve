@@ -64,4 +64,11 @@ public class UserController {
     public  ResponseData updateUser(@RequestBody User user){
         return userService.updateUser(user);
     }
+
+    @ApiOperation(value = "deleteUsers", notes = "批量删除用户")
+    @ApiImplicitParam(name = "userIdList", value = "用户ID")
+    @DeleteMapping("deleteUsers")
+    public ResponseData deleteUsers(@RequestBody List<String> userIdList){
+        return userService.deleteUsers(userIdList);
+    }
 }

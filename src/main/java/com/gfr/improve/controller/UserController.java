@@ -43,6 +43,6 @@ public class UserController {
     )
     @GetMapping("queryAll")
     public ResponseData queryAll(int page, int limit){
-        return new ResponseData(ResponseCode.SUCCESS, userService.queryAllByLimit((page-1)*limit, limit), userService.queryUserNum());
+        return new ResponseData("0", "操作成功", userService.queryAllByLimit((page-1)*limit, limit), userService.queryUserNum());
     }
 }

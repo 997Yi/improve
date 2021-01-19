@@ -53,17 +53,21 @@
                         {field: 'userId',title: 'ID',sort: true,fixed: 'left',align: 'center'},
                         {field: 'username',title: '用户名',align: 'center',edit: 'text'},
                         {field: 'userIcon',title: '头像',align: 'center'
-                            // ,
-                            // templet: function (res) {
-                            //     return '<img src="classpath:/imgae/' + res.userIcon + '" />';
-                            // }
+                            ,
+                            templet: function (res) {
+                                return '<img src="/image/' + res.userIcon + '" width="100px" height="100px"/>';
+                            },
+                            width: 100
                         },
                         {field: 'telephone',title: '电话',align: 'center',edit: 'text'},
                         {field: 'sportTime',title: '运动总时长',align: 'center'},
                         {field: 'sportDay',title: '运动天数',align: 'center'},
                         {fixed: 'right',title: '操作',width: 165,align: 'center',toolbar: '#barDemo'}
                     ]
-                ]
+                ],
+                text: {
+                    none: '暂无相关数据' //默认：无数据。
+                }
             });
 
             //监听单元格编辑(单元格在线编辑)

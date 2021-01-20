@@ -2,3 +2,13 @@
     margin-top: 10px;
     margin-left: 5px;
 }
+
+.layui-table img{
+    width: 100px;
+    height: 100px;
+}
+
+.layui-table video{
+    width: 100px;
+    height: 100px;
+}

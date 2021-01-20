@@ -65,7 +65,7 @@
                     align: 'center',
                     edit: 'text'
                 }, {
-                    field: 'ckeyword',
+                    field: 'cKeyword',
                     title: '关键字',
                     align: 'center',
                     edit: 'text'
@@ -84,10 +84,11 @@
                     }
                 }, {
                     field: 'cvurl',
+
                     title: '视频',
                     align: 'center',
                     templet: function (res) {
-                        return '<video autoplay="autoplay"> <source src="'+res.cvurl+'" type="video/mp4"/> </video>';
+                        return '<video src="'+res.cvurl+'" controls="controls"> </video>';
                     }
                 }, {
                     field: 'ctime',

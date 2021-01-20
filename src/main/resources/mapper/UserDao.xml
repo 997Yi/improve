@@ -10,6 +10,7 @@
         <result property="userIcon" column="user_icon" jdbcType="VARCHAR"/>
         <result property="sportTime" column="sport_time" jdbcType="INTEGER"/>
         <result property="sportDay" column="sport_day" jdbcType="INTEGER"/>
+        <result property="profile" column="profile" jdbcType="VARCHAR"/>
     </resultMap>
 
     <!--查询单个-->
@@ -20,7 +21,8 @@
                telephone,
                user_icon,
                sport_time,
-               sport_day
+               sport_day,
+               profile
         from improve.user
         where user_id = #{userId}
     </select>
@@ -33,14 +35,15 @@
                telephone,
                user_icon,
                sport_time,
-               sport_day
+               sport_day,
+               profile
         from improve.user limit #{offset}, #{limit}
     </select>
 
     <!--通过实体作为筛选条件查询-->
     <select id="queryAll" resultMap="UserMap">
         select
-        user_id, username, password, telephone, user_icon, sport_time, sport_day
+        user_id, username, password, telephone, user_icon, sport_time, sport_day,profile
         from improve.user
         <where>
             <if test="userId != null and userId != ''">
@@ -64,6 +67,9 @@
             <if test="sportDay != null">
                 and sport_day = #{sportDay}
             </if>
+            <if test="profile != null">
+                and profile = #{profile}
+            </if>
         </where>
     </select>
 
@@ -74,24 +80,24 @@
     </insert>
 
     <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">
-        insert into improve.user(username, password, telephone, user_icon, sport_time, sport_day)
+        insert into improve.user(username, password, telephone, user_icon, sport_time, sport_day, profile)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.username}, #{entity.password}, #{entity.telephone}, #{entity.userIcon}, #{entity.sportTime},
-            #{entity.sportDay})
+            #{entity.sportDay}), #{profile}
         </foreach>
     </insert>
 
     <insert id="insertOrUpdateBatch" keyProperty="userId" useGeneratedKeys="true">
-        insert into improve.user(username, password, telephone, user_icon, sport_time, sport_day)
+        insert into improve.user(username, password, telephone, user_icon, sport_time, sport_day, profile)
         values
         <foreach collection="entities" item="entity" separator=",">
             (#{entity.username}, #{entity.password}, #{entity.telephone}, #{entity.userIcon}, #{entity.sportTime},
-            #{entity.sportDay})
+            #{entity.sportDay}, #{profile})
         </foreach>
         on duplicate key update
         username = values(username) , password = values(password) , telephone = values(telephone) , user_icon =
-        values(user_icon) , sport_time = values(sport_time) , sport_day = values(sport_day)
+        values(user_icon) , sport_time = values(sport_time) , sport_day = values(sport_day) , profile = values (profile)
     </insert>
 
     <!--通过主键修改数据-->
@@ -115,6 +121,9 @@
             </if>
             <if test="sportDay != null">
                 sport_day = #{sportDay},
+            </if>
+            <if test="profile != null">
+                profile = #{profile}
             </if>
         </set>
         where user_id = #{userId}
@@ -141,7 +150,8 @@
             telephone,
             user_icon,
             sport_time,
-            sport_day
+            sport_day,
+            profile
         from improve.user
         where
             user.username like concat("%",#{value},"%")
@@ -174,6 +184,9 @@
             </if>
             <if test="sportDay != null">
                 sport_day = #{sportDay},
+            </if>
+            <if test="profile != null">
+                profile = #{profile}
             </if>
         </set>
         where user_id = #{userId};

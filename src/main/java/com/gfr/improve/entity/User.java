@@ -39,6 +39,18 @@ public class User implements Serializable {
      */
     private Integer sportDay;
 
+    /**
+     * 个性签名
+     */
+    private String profile;
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
+    }
 
     public String getUserId() {
         return userId;

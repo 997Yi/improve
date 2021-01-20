@@ -171,4 +171,9 @@ public class UserServiceImpl implements UserService {
         }
 
     }
+
+    @Override
+    public ResponseData addUser(User user) {
+        return new ResponseData(ResponseCode.SUCCESS, userDao.insert(user));
+    }
 }

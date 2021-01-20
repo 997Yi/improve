@@ -26,6 +26,9 @@
     </script>
 
     <script type="text/html" id="toolbarDemo">
+        <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="add">
+            <i class="layui-icon layui-icon-addition"></i>
+        </button>
         <button type="button" class="layui-btn layui-btn-primary layui-btn-sm" lay-event="del">
             <i class="layui-icon">&#xe640;</i>
         </button>
@@ -63,6 +66,7 @@
                         {field: 'telephone', title: '电话', align: 'center'},
                         {field: 'sportTime', title: '运动总时长', align: 'center'},
                         {field: 'sportDay', title: '运动天数', align: 'center'},
+                        {field: 'profile', title: '个性签名', align: 'center'},
                         {fixed: 'right', title: '操作', width: 165, align: 'center', toolbar: '#barDemo'}
                     ]
                 ],
@@ -180,6 +184,19 @@
                             })
                         });
                     }
+                } else if (event === 'add'){
+                    layer.open({
+                        title: '添加用户',
+                        type: 2,
+                        content: 'getAddUser',
+                        area: ['500px', '250px'],
+                        resize: false,
+                        scrollbar: false,
+                        //当弹出层结束后，刷新数据
+                        end: function (){
+                            location.reload();
+                        }
+                    });
                 }
             });
         })

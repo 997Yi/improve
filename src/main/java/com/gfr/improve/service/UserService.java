@@ -82,4 +82,6 @@ public interface UserService {
      * @return
      */
     ResponseData deleteUsers(List<String> userIdList);
+
+    ResponseData addUser(User user);
 }

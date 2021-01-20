@@ -168,4 +168,9 @@ public class BodyServiceImpl implements BodyService {
         }
 
     }
+
+    @Override
+    public ResponseData addBody(Body body) {
+        return new ResponseData(ResponseCode.SUCCESS, bodyDao.insert(body));
+    }
 }

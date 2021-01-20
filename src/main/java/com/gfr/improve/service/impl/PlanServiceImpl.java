@@ -178,6 +178,7 @@ public class PlanServiceImpl implements PlanService {
     public boolean deleteByCourseId(String courseId){
         //根据courseId查询所有与课程有关的计划
         Plan condition = new Plan();
+        condition.setCourseId(courseId);
         List<Plan> plans = planDao.queryAll(condition);
 
         //对所有计划进行删除

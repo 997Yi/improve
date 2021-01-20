@@ -1,25 +1,26 @@
 package com.gfr.improve.dao;
 
 import com.gfr.improve.entity.Plan;
+import com.gfr.improve.entity.UserPlan;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 /**
- * (Plan)表数据库访问层
+ * (UserPlan)表数据库访问层
  *
  * @author makejava
- * @since 2021-01-19 10:12:15
+ * @since 2021-01-19 19:24:40
  */
-public interface PlanDao {
+public interface UserPlanDao {
 
     /**
      * 通过ID查询单条数据
-     *
-     * @param planId 主键
-     * @return 实例对象
+     * @param userId
+     * @param planId
+     * @return
      */
-    Plan queryById(String planId);
+    UserPlan queryById(@Param("userId") String userId,@Param("planId") String planId);
 
     /**
      * 查询指定行数据
@@ -28,59 +29,58 @@ public interface PlanDao {
      * @param limit  查询条数
      * @return 对象列表
      */
-    List<Plan> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
+    List<UserPlan> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
 
 
     /**
      * 通过实体作为筛选条件查询
      *
-     * @param plan 实例对象
+     * @param userPlan 实例对象
      * @return 对象列表
      */
-    List<Plan> queryAll(Plan plan);
+    List<UserPlan> queryAll(UserPlan userPlan);
 
     /**
      * 新增数据
      *
-     * @param plan 实例对象
+     * @param userPlan 实例对象
      * @return 影响行数
      */
-    int insert(Plan plan);
+    int insert(UserPlan userPlan);
 
     /**
      * 批量新增数据（MyBatis原生foreach方法）
      *
-     * @param entities List<Plan> 实例对象列表
+     * @param entities List<UserPlan> 实例对象列表
      * @return 影响行数
      */
-    int insertBatch(@Param("entities") List<Plan> entities);
+    int insertBatch(@Param("entities") List<UserPlan> entities);
 
     /**
      * 批量新增或按主键更新数据（MyBatis原生foreach方法）
      *
-     * @param entities List<Plan> 实例对象列表
+     * @param entities List<UserPlan> 实例对象列表
      * @return 影响行数
      */
-    int insertOrUpdateBatch(@Param("entities") List<Plan> entities);
+    int insertOrUpdateBatch(@Param("entities") List<UserPlan> entities);
 
     /**
      * 修改数据
      *
-     * @param plan 实例对象
+     * @param userPlan 实例对象
      * @return 影响行数
      */
-    int update(Plan plan);
+    int update(UserPlan userPlan);
 
     /**
-     * 通过主键删除数据
-     *
-     * @param planId 主键
-     * @return 影响行数
+     * 删除所有该计划(userId、 planId、 userId + planId)对应的用户-计划
+     * @param userPlan
+     * @return
      */
-    int deleteById(String planId);
+    int delete(UserPlan userPlan);
 
     /**
-     * 查询数据总量
+     * 获取数据量
      * @return
      */
     Integer getCount();
@@ -92,8 +92,7 @@ public interface PlanDao {
      * @param limit
      * @return
      */
-    List<Plan> queryByCondition(@Param("condition") String condition,@Param("offset") Integer offset, @Param("limit")Integer limit);
-
+    List<UserPlan> queryByCondition(@Param("condition") String condition,@Param("offset") Integer offset, @Param("limit")Integer limit);
 
     /**
      * 查询条件数据总量

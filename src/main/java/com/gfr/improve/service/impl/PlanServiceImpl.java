@@ -1,7 +1,10 @@
 package com.gfr.improve.service.impl;
 
+import com.gfr.improve.dao.CourseDao;
 import com.gfr.improve.dao.PlanDao;
+import com.gfr.improve.dao.UserPlanDao;
 import com.gfr.improve.entity.Plan;
+import com.gfr.improve.entity.UserPlan;
 import com.gfr.improve.result.ResponseCode;
 import com.gfr.improve.result.ResponseData;
 import com.gfr.improve.service.PlanService;
@@ -11,7 +14,11 @@ import org.springframework.transaction.event.TransactionalEventListener;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.annotation.Resource;
+import javax.print.attribute.HashAttributeSet;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * (Plan)表服务实现类
@@ -20,9 +27,16 @@ import java.util.List;
  * @since 2021-01-19 10:12:16
  */
 @Service("planService")
+@Transactional(rollbackFor = Exception.class)
 public class PlanServiceImpl implements PlanService {
     @Resource
     private PlanDao planDao;
+
+    @Resource
+    private CourseDao courseDao;
+
+    @Resource
+    private UserPlanDao userPlanDao;
 
     /**
      * 通过ID查询单条数据
@@ -63,18 +77,10 @@ public class PlanServiceImpl implements PlanService {
      */
     @Override
     public Boolean insert(Plan plan) {
-        try{
-            if(planDao.insert(plan) > 0){
-                return true;
-            }else{
-                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-                return false;
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return false;
+        if(planDao.insert(plan) > 0){
+            return true;
         }
+        return false;
     }
 
     /**
@@ -84,20 +90,11 @@ public class PlanServiceImpl implements PlanService {
      * @return 是否成功
      */
     @Override
-    @Transactional
     public Boolean update(Plan plan) {
-        try{
-            if(planDao.update(plan) > 0){
-                return true;
-            }else{
-                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-                return false;
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return false;
+        if(planDao.update(plan) > 0){
+            return true;
         }
+        return false;
     }
 
     /**
@@ -119,21 +116,14 @@ public class PlanServiceImpl implements PlanService {
      * @return 是否成功
      */
     @Override
-    @Transactional
+
     public boolean deleteById(List<String> planId) {
-        try{
-            for(String id : planId){
-                if(planDao.deleteById(id) == 0){
-                    TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-                    return false;
-                }
+        for(String id : planId){
+            if(planDao.deleteById(id) == 0){
+                return false;
             }
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-            return false;
         }
+        return true;
     }
 
     /**
@@ -157,5 +147,61 @@ public class PlanServiceImpl implements PlanService {
             return new ResponseData("0", "操作成功", plans, planDao.getLikeCount(condition));
         }
         return new ResponseData(ResponseCode.FAILED);
+    }
+
+
+    @Override
+    public Map<Plan, String> queryAllPlanWithName() {
+        List<Plan> plans = planDao.queryAll(null);
+        Map<Plan, String> resMap = new HashMap();
+
+        for(Plan plan : plans){
+            resMap.put(plan, courseDao.queryById(plan.getCourseId()).getCName());
+        }
+
+        return resMap;
+    }
+
+
+
+    /**
+     * 删除课程对应的计划
+     * @param courseId
+     * @return
+     */
+    @Override
+    public boolean deleteByCourseId(String courseId){
+        List<String> list = new ArrayList<>(1);
+        list.add(courseId);
+
+        return deleteByCourseId(list);
+    }
+
+    /**
+     * 删除课程对应的计划
+     * @param courseId
+     * @return
+     */
+    @Override
+    public boolean deleteByCourseId(List<String> courseId){
+        Plan plan = new Plan();
+        UserPlan userPlan = new UserPlan();
+
+        for(String id : courseId){
+            plan.setCourseId(id);
+
+            List<Plan> plans = planDao.queryAll(plan);
+            for(Plan p : plans){
+                //删除课程id对应的计划
+                planDao.deleteById(p.getPlanId());
+
+
+                userPlan.setPlanId(p.getPlanId());
+                //删除计划id对应的用户-计划
+                userPlanDao.delete(userPlan);
+            }
+
+        }
+        return true;
     }
 }

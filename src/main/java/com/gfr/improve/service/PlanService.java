@@ -4,6 +4,7 @@ import com.gfr.improve.entity.Plan;
 import com.gfr.improve.result.ResponseData;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * (Plan)表服务接口
@@ -68,4 +69,25 @@ public interface PlanService {
      * @return
      */
     ResponseData queryByConditions(String condition, Integer offset, Integer limit);
+
+    /**
+     * 查询所有带有课程名称的计划
+     * @return
+     */
+    Map<Plan, String> queryAllPlanWithName();
+
+
+    /**
+     * 删除课程对应的计划
+     * @param courseId
+     * @return
+     */
+    boolean deleteByCourseId(String courseId);
+
+    /**
+     * 删除课程对应的计划
+     * @param courseId
+     * @return
+     */
+    boolean deleteByCourseId(List<String> courseId);
 }

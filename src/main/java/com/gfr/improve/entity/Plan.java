@@ -39,7 +39,7 @@ public class Plan implements Serializable {
         this.planId = planId;
     }
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "GMT-6")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "GMT+8")
     public Date getPlanStart() {
         return planStart;
     }
@@ -48,7 +48,7 @@ public class Plan implements Serializable {
         this.planStart = planStart;
     }
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "GMT-6")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "GMT+8")
     public Date getPlanEnd() {
         return planEnd;
     }

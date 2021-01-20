@@ -42,6 +42,7 @@
         <include refid="selectAll"></include>
         from improve.plan
         <include refid="conditionLike"></include>
+        limit #{offset}, #{limit}
     </select>
 
     <!--查询单个-->
@@ -128,5 +129,11 @@
         where plan_id = #{planId}
     </delete>
 
+
+    <delete id="deleteByCourseId">
+        delete
+        from improve.plan
+        where course_id = #{courseId}
+    </delete>
 
 </mapper>

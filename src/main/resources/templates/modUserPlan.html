@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <style>
+        #time{
+            width: 500px;
+            height: 557px;
+        }
+        .selectTime, #myButton, #showInfo{
+            width: 272px;
+            margin: 40px auto 20px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="layui-inline" id="time"> <!-- 注意：这一层元素并不是必须的 -->
+    <form action="" class="layui-form" id="formDemo" method="PUT">
+        <div th:text="${session.user.userId} + '  -  ' + ${session.user.username}" id="showInfo" style="text-align: center"></div>
+        <div class="layui-form-item">
+            <div class="layui-input-block" style="width: 272px; margin: 40px auto 20px">
+                <select name="planId" lay-verify="required">
+                    <option value="" th:value="${session.plan.planId}" th:text="${#dates.format(session.plan.planStart, 'yyyy-MM-dd')} + ' - ' + ${#dates.format(session.plan.planEnd, 'yyyy-MM-dd')} + ' - ' + ${session.course.cName}"></option>
+                    <option value="" th:each="pl : ${session.plans}" th:text="${#dates.format(pl.key.planStart, 'yyyy-MM-dd')} + ' - ' + ${#dates.format(pl.key.planEnd, 'yyyy-MM-dd')} + ' - ' + ${pl.value}" th:value="${pl.key.planId}"></option>
+                </select>
+            </div>
+        </div>
+        <input name="checktime" type="text" class="layui-input selectTime" id="time2" value="" th:value="${#dates.format(session.user_plan.checktime, 'yyyy-MM-dd HH:mm:ss')}">
+        <button class="layui-btn" id="myButton" lay-submit lay-filter="formDemo">立即提交</button>
+    </form>
+</div>
+
+<script src="layui/layui.js"></script>
+<script th:inline="javascript">
+    layui.use(['laydate', 'form'], function(){
+        var laydate = layui.laydate,
+            form = layui.form;
+
+        laydate.render({
+           elem: '#time2',
+           type: 'datetime',
+           format: 'yyyy-MM-dd HH:mm:ss'
+        });
+
+        form.on('submit(formDemo)', function(data){
+            var userId = /*[[${session.user.userId}]]*/ '';
+            layui.jquery.ajax({
+                type: 'PUT',
+                url: "userPlan/mod/",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify({
+                    'userId': userId,
+                    'planId': data.field.planId,
+                    'checktime': data.field.checktime
+                }),
+                success: function (res) {
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    parent.layer.close(index); //再执行关闭
+                },
+                error: function (res){
+                    layer.msg("修改失败！");
+                }
+
+            });
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gfr.improve.dao.UserPlanDao">
+
+    <resultMap type="com.gfr.improve.entity.UserPlan" id="UserPlanMap">
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="planId" column="plan_id" jdbcType="VARCHAR"/>
+        <result property="checktime" column="checktime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="selectAll">
+        select user_id,
+               plan_id,
+               checktime
+    </sql>
+    <sql id="conditionLike">
+        <where>
+            plan_id like CONCAT('%', #{condition}, '%') or
+            user_id like CONCAT('%', #{condition}, '%') or
+            checktime like CONCAT('%', #{condition}, '%')
+        </where>
+    </sql>
+
+
+    <select id="getCount" resultType="integer">
+        select count(*)
+        from improve.user_plan
+    </select>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="UserPlanMap">
+        <include refid="selectAll"></include>
+        from improve.user_plan
+        where user_id = #{userId} and plan_id = #{planId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="UserPlanMap">
+        <include refid="selectAll"></include>
+        from improve.user_plan limit #{offset}, #{limit}
+    </select>
+
+    <select id="queryByCondition" resultMap="UserPlanMap">
+        <include refid="selectAll"></include>
+        from improve.user_plan
+        <include refid="conditionLike"></include>
+        limit #{offset}, #{limit}
+    </select>
+
+    <select id="getLikeCount" resultType="Integer">
+        select count(*)
+        from improve.user_plan
+        <include refid="conditionLike"></include>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="UserPlanMap">
+        select
+        user_id, plan_id, checktime
+        from improve.user_plan
+        <where>
+            <if test="userId != null and userId != ''">
+                and user_id = #{userId}
+            </if>
+            <if test="planId != null and planId != ''">
+                and plan_id = #{planId}
+            </if>
+            <if test="checktime != null">
+                and checktime = #{checktime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert">
+        insert into improve.user_plan
+        values (#{userId}, #{planId}, #{checktime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into improve.user_plan(checktime)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.checktime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="userId" useGeneratedKeys="true">
+        insert into improve.user_plan(checktime)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.checktime})
+        </foreach>
+        on duplicate key update
+        checktime = values(checktime)
+    </insert>
+
+    <!--通过用户id修改数据-->
+    <update id="update">
+        update improve.user_plan
+        <set>
+            <if test="planId != null">
+                plan_id = #{planId},
+            </if>
+            <if test="checktime != null">
+                checktime = #{checktime},
+            </if>
+        </set>
+        where user_id = #{userId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="delete">
+        delete
+        from improve.user_plan
+        <where>
+            <if test="userId != null and userId != ''">
+                and user_id = #{userId}
+            </if>
+            <if test="planId != null and planId != ''">
+                and plan_id = #{planId}
+            </if>
+        </where>
+    </delete>
+
+</mapper>

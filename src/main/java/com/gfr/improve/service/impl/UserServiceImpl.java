@@ -4,6 +4,9 @@ import com.gfr.improve.dao.UserDao;
 import com.gfr.improve.entity.User;
 import com.gfr.improve.result.ResponseCode;
 import com.gfr.improve.result.ResponseData;
+import com.gfr.improve.service.BodyService;
+import com.gfr.improve.service.UserPlanCompleteDateService;
+import com.gfr.improve.service.UserPlanService;
 import com.gfr.improve.service.UserService;
 import com.gfr.improve.util.EncryptionUtil;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,12 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Resource
     private UserDao userDao;
+    @Resource
+    private UserPlanService userPlanService;
+    @Resource
+    private UserPlanCompleteDateService userPlanCompleteDateService;
+    @Resource
+    private BodyService bodyService;
 
     /**
      * 通过ID查询单条数据
@@ -79,8 +88,22 @@ public class UserServiceImpl implements UserService {
      * @return 是否成功
      */
     @Override
+    @Transactional
     public boolean deleteById(String userId) {
-        return this.userDao.deleteById(userId) > 0;
+        try {
+            if (this.userDao.deleteById(userId) > 0) {
+                userPlanService.deleteByUserId(userId);
+                userPlanCompleteDateService.delete(userId);
+                bodyService.deleteById(userId);
+                return true;
+            }
+            return false;
+        }catch (Exception e){
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return false;
+        }
+
     }
 
     /**
@@ -134,12 +157,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public ResponseData deleteUsers(List<String> userIdList) {
         try {
-            int rows = 0;
             for (String userId : userIdList){
-                rows += userDao.deleteById(userId);
-            }
-            if (rows == userIdList.size()) {
-                return new ResponseData(ResponseCode.SUCCESS);
+                userDao.deleteById(userId);
+                userPlanService.deleteByUserId(userId);
+                userPlanCompleteDateService.delete(userId);
+                bodyService.deleteById(userId);
             }
             return new ResponseData(ResponseCode.FAILED);
         }catch (Exception e){

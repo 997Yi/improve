@@ -77,4 +77,6 @@ public interface BodyService {
      * @return
      */
     ResponseData deleteBodys(List<String> userIdList);
+
+    ResponseData addBody(Body body);
 }

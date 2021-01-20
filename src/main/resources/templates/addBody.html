@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+</head>
+<body>
+
+<form class="layui-form" action="" method="POST">
+    <div class="layui-form-item">
+        <label class="layui-form-label">ID</label>
+        <div class="layui-input-block">
+            <input type="text" name="userId" style="width: 85%" required  lay-verify="required" placeholder="请输入用户ID" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">身高（cm）</label>
+        <div class="layui-input-block">
+            <input type="text" name="height" style="width: 85%" required  lay-verify="required" placeholder="请输入身高（cm）" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">体重（kg）</label>
+        <div class="layui-input-block">
+            <input type="text" name="weight" style="width: 85%" required  lay-verify="required" placeholder="请输入体重（kg）" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">胸围</label>
+        <div class="layui-input-block">
+            <input type="text" name="chestCircumference" style="width: 85%" required  lay-verify="required" placeholder="请输入胸围" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">腰围</label>
+        <div class="layui-input-block">
+            <input type="text" name="waistline" style="width: 85%" required  lay-verify="required" placeholder="请输入腰围" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">臀围</label>
+        <div class="layui-input-block">
+            <input type="text" name="hipline" style="width: 85%" required  lay-verify="required" placeholder="请输入臀围" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">体脂肪率（%）</label>
+        <div class="layui-input-block">
+            <input type="text" name="bodyFatRate" style="width: 85%" required  lay-verify="required" placeholder="请输入体脂肪率（%）" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+</div>
+
+<script src="layui/layui.js"></script>
+<script>
+    layui.use(['form'], function(){
+        var form = layui.form;
+
+        //监听提交
+        form.on('submit(formDemo)', function(data){
+            layui.jquery.ajax({
+                type: 'POST',
+                url: "body/addBody",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(data.field),
+                success: function (res) {
+                    if (res.data == 1){
+                        layer.msg("添加成功！");
+                    }else {
+                        layer.msg("添加失败！");
+                    }
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    parent.layer.close(index); //再执行关闭
+                },
+                error: function (res){
+                    layer.msg("添加失败！");
+                }
+            });
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

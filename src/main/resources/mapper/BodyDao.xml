@@ -69,8 +69,8 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="userId" useGeneratedKeys="true">
-        insert into improve.body(height, weight, chest_circumference, waistline, hipline, body_fat_rate)
-        values (#{height}, #{weight}, #{chestCircumference}, #{waistline}, #{hipline}, #{bodyFatRate})
+        insert into improve.body(user_id,height, weight, chest_circumference, waistline, hipline, body_fat_rate)
+        values (#{userId},#{height}, #{weight}, #{chestCircumference}, #{waistline}, #{hipline}, #{bodyFatRate})
     </insert>
 
     <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">

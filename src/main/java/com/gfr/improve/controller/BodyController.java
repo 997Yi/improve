@@ -1,7 +1,6 @@
 package com.gfr.improve.controller;
 
 import com.gfr.improve.entity.Body;
-import com.gfr.improve.entity.User;
 import com.gfr.improve.result.ResponseCode;
 import com.gfr.improve.result.ResponseData;
 import com.gfr.improve.service.BodyService;
@@ -67,5 +66,12 @@ public class BodyController {
     @DeleteMapping("deleteBodys")
     public ResponseData deleteBodys(@RequestBody List<String> userIdList){
         return bodyService.deleteBodys(userIdList);
+    }
+
+    @ApiOperation(value = "addBody", notes = "添加身体信息")
+    @ApiImplicitParam(name = "body", value = "身体信息")
+    @PostMapping("addBody")
+    public  ResponseData addBody(@RequestBody Body body){
+        return bodyService.addBody(body);
     }
 }

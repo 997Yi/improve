@@ -106,6 +106,7 @@ public class UserPlanServiceImpl implements UserPlanService {
      */
     @Override
     public boolean delete(List<UserPlan> userPlanList) {
+        //对列表进行遍历， 对每一个进行删除
         for(UserPlan userPlan : userPlanList){
             if(userPlanDao.delete(userPlan) == 0){
                 return false;

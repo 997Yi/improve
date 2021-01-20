@@ -8,6 +8,8 @@ import com.gfr.improve.entity.UserPlan;
 import com.gfr.improve.result.ResponseCode;
 import com.gfr.improve.result.ResponseData;
 import com.gfr.improve.service.PlanService;
+import com.gfr.improve.service.UserPlanService;
+import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -98,16 +100,21 @@ public class PlanServiceImpl implements PlanService {
     }
 
     /**
-     * 通过主键删除数据
+     * 通过主键删除数据 删除数据时应该同时删除user_plan映射
      *
      * @param planId 主键
      * @return 是否成功
      */
     @Override
     public boolean deleteById(String planId) {
-        return this.planDao.deleteById(planId) > 0;
-    }
+        if(planDao.deleteById(planId) != 0){
+            UserPlan userPlan = new UserPlan();
+            userPlan.setPlanId(planId);
 
+            return userPlanDao.delete(userPlan) != 0;
+        }
+        return false;
+    }
 
     /**
      * 通过主键删除数据
@@ -116,10 +123,9 @@ public class PlanServiceImpl implements PlanService {
      * @return 是否成功
      */
     @Override
-
     public boolean deleteById(List<String> planId) {
         for(String id : planId){
-            if(planDao.deleteById(id) == 0){
+            if(!deleteById(id)){
                 return false;
             }
         }
@@ -171,10 +177,18 @@ public class PlanServiceImpl implements PlanService {
      */
     @Override
     public boolean deleteByCourseId(String courseId){
-        List<String> list = new ArrayList<>(1);
-        list.add(courseId);
+        //根据courseId查询所有与课程有关的计划
+        Plan condition = new Plan();
+        List<Plan> plans = planDao.queryAll(condition);
 
-        return deleteByCourseId(list);
+        //对所有计划进行删除
+        for(Plan plan : plans){
+            if(!deleteById(plan.getPlanId())){
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -184,23 +198,10 @@ public class PlanServiceImpl implements PlanService {
      */
     @Override
     public boolean deleteByCourseId(List<String> courseId){
-        Plan plan = new Plan();
-        UserPlan userPlan = new UserPlan();
-
         for(String id : courseId){
-            plan.setCourseId(id);
-
-            List<Plan> plans = planDao.queryAll(plan);
-            for(Plan p : plans){
-                //删除课程id对应的计划
-                planDao.deleteById(p.getPlanId());
-
-
-                userPlan.setPlanId(p.getPlanId());
-                //删除计划id对应的用户-计划
-                userPlanDao.delete(userPlan);
+            if(!deleteByCourseId(id)){
+                return false;
             }
-
         }
         return true;
     }

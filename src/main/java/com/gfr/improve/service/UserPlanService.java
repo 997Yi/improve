@@ -32,12 +32,31 @@ public interface UserPlanService {
     ResponseData queryAllByLimit(Integer offset, Integer limit);
 
     /**
+     * 通过条件查询
+     * @param condition
+     * @param page
+     * @param limit
+     * @return
+     */
+    ResponseData queryByConditions(String condition, Integer page, Integer limit);
+
+
+
+
+
+
+    /**
      * 新增数据
      *
      * @param userPlan 实例对象
      * @return 实例对象
      */
     Boolean insert(UserPlan userPlan);
+
+
+
+
+
 
     /**
      * 修改数据
@@ -46,6 +65,11 @@ public interface UserPlanService {
      * @return 实例对象
      */
     Boolean update(UserPlan userPlan);
+
+
+
+
+
 
     /**
      * 通过主键删除数据
@@ -61,16 +85,6 @@ public interface UserPlanService {
      * @return
      */
     boolean delete(List<UserPlan> userPlanList);
-
-    /**
-     * 通过条件查询
-     * @param condition
-     * @param page
-     * @param limit
-     * @return
-     */
-    ResponseData queryByConditions(String condition, Integer page, Integer limit);
-
 
     /**
      * 删除与用户有关的user-plan

@@ -32,12 +32,31 @@ public interface PlanService {
     ResponseData queryAllByLimit(Integer offset, Integer limit);
 
     /**
+     * 通过条件查询
+     * @param condition
+     * @return
+     */
+    ResponseData queryByConditions(String condition, Integer offset, Integer limit);
+
+    /**
+     * 查询所有带有课程名称的计划
+     * @return
+     */
+    Map<Plan, String> queryAllPlanWithName();
+
+
+
+
+    /**
      * 新增数据
      *
      * @param plan 实例对象
      * @return 实例对象
      */
     Boolean insert(Plan plan);
+
+
+
 
     /**
      * 修改数据
@@ -47,8 +66,12 @@ public interface PlanService {
      */
     Boolean update(Plan plan);
 
+
+
+
+
     /**
-     * 通过主键删除数据
+     * 通过主键删除数据 删除数据时应该同时删除user_plan映射
      *
      * @param planId 主键
      * @return 是否成功
@@ -62,20 +85,6 @@ public interface PlanService {
      * @return 是否成功
      */
     boolean deleteById(List<String> planId);
-
-    /**
-     * 通过条件查询
-     * @param condition
-     * @return
-     */
-    ResponseData queryByConditions(String condition, Integer offset, Integer limit);
-
-    /**
-     * 查询所有带有课程名称的计划
-     * @return
-     */
-    Map<Plan, String> queryAllPlanWithName();
-
 
     /**
      * 删除课程对应的计划

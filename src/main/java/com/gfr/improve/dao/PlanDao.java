@@ -30,7 +30,6 @@ public interface PlanDao {
      */
     List<Plan> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
 
-
     /**
      * 通过实体作为筛选条件查询
      *
@@ -38,6 +37,33 @@ public interface PlanDao {
      * @return 对象列表
      */
     List<Plan> queryAll(Plan plan);
+
+    /**
+     * 查询数据总量
+     * @return
+     */
+    Integer getCount();
+
+    /**
+     * 查询条件数据
+     * @param condition
+     * @param offset
+     * @param limit
+     * @return
+     */
+    List<Plan> queryByCondition(@Param("condition") String condition,@Param("offset") Integer offset, @Param("limit")Integer limit);
+
+    /**
+     * 查询条件数据总量
+     * @param condition
+     * @return
+     */
+    Integer getLikeCount(@Param("condition") String condition);
+
+
+
+
+
 
     /**
      * 新增数据
@@ -63,6 +89,10 @@ public interface PlanDao {
      */
     int insertOrUpdateBatch(@Param("entities") List<Plan> entities);
 
+
+
+
+
     /**
      * 修改数据
      *
@@ -71,6 +101,10 @@ public interface PlanDao {
      */
     int update(Plan plan);
 
+
+
+
+
     /**
      * 通过主键删除数据
      *
@@ -78,28 +112,5 @@ public interface PlanDao {
      * @return 影响行数
      */
     int deleteById(String planId);
-
-    /**
-     * 查询数据总量
-     * @return
-     */
-    Integer getCount();
-
-    /**
-     * 查询条件数据
-     * @param condition
-     * @param offset
-     * @param limit
-     * @return
-     */
-    List<Plan> queryByCondition(@Param("condition") String condition,@Param("offset") Integer offset, @Param("limit")Integer limit);
-
-
-    /**
-     * 查询条件数据总量
-     * @param condition
-     * @return
-     */
-    Integer getLikeCount(@Param("condition") String condition);
 
 }

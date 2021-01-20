@@ -150,6 +150,16 @@
         });
 
 
+        table.on('row(test)', function (obj){
+            $.ajax({
+                type: 'GET',
+                url: "course/selectOne/" + obj.data.courseId,
+                success: function (res) {
+                    layer.msg('关联课程<br/><br/>' + res.data.cKeyword +' -- ' + res.data.cname);
+                }
+            });
+        });
+
         //当搜索时根据要求展示内容
         $("#search").bind('click', function () {
             table.reload('demo', {

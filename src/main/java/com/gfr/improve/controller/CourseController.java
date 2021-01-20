@@ -1,11 +1,13 @@
 package com.gfr.improve.controller;
 
 import com.gfr.improve.entity.Course;
+import com.gfr.improve.result.ResponseCode;
 import com.gfr.improve.result.ResponseData;
 import com.gfr.improve.service.CourseService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,9 +37,13 @@ public class CourseController {
      * @param id 主键
      * @return 单条数据
      */
-    @GetMapping("selectOne")
-    public Course selectOne(String id) {
-        return this.courseService.queryById(id);
+    @GetMapping("selectOne/{id}")
+    public ResponseData selectOne(@PathVariable("id") String id) {
+        Course course = courseService.queryById(id);
+        if(course != null){
+            return new ResponseData(ResponseCode.SUCCESS, course);
+        }
+        return new ResponseData(ResponseCode.FAILED);
     }
 
     /**

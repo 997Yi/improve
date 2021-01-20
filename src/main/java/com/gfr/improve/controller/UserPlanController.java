@@ -1,17 +1,24 @@
 package com.gfr.improve.controller;
 
+import com.gfr.improve.entity.Course;
 import com.gfr.improve.entity.Plan;
+import com.gfr.improve.entity.User;
 import com.gfr.improve.entity.UserPlan;
 import com.gfr.improve.result.ResponseCode;
 import com.gfr.improve.result.ResponseData;
+import com.gfr.improve.service.CourseService;
+import com.gfr.improve.service.PlanService;
 import com.gfr.improve.service.UserPlanService;
+import com.gfr.improve.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * (UserPlan)表控制层
@@ -27,6 +34,15 @@ public class UserPlanController {
      */
     @Resource
     private UserPlanService userPlanService;
+
+    @Resource
+    private UserService userService;
+
+    @Resource
+    private CourseService courseService;
+
+    @Resource
+    private PlanService planService;
 
     /**
      * 通过主键查询单条数据
@@ -98,6 +114,25 @@ public class UserPlanController {
             return new ResponseData(ResponseCode.SUCCESS);
         }
         return new ResponseData(ResponseCode.FAILED);
+    }
+
+    @ApiOperation(value = "queryInfo", notes = "查询用户-计划对应的详细信息，例如用户名称和课程名称")
+    @GetMapping("queryInfo/{userId}/{planId}")
+    @ResponseBody
+    public ResponseData queryInfo(@PathVariable("userId") String userId, @PathVariable("planId") String planId){
+        Map<String, Object> resMap = new HashMap<>();
+
+        User user = userService.queryById(userId);
+        Course course = courseService.queryById(planService.queryById(planId).getCourseId());
+
+        if(user == null || course == null){
+            return new ResponseData(ResponseCode.FAILED);
+        }else{
+            resMap.put("user", user);
+            resMap.put("course", course);
+
+            return new ResponseData(ResponseCode.SUCCESS, resMap);
+        }
     }
 
 }

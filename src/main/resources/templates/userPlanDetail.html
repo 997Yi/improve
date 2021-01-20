@@ -153,6 +153,17 @@
         });
 
 
+        table.on('row(test)', function (obj){
+            $.ajax({
+                type: 'GET',
+                url: "userPlan/queryInfo/" + obj.data.userId + "/" + obj.data.planId,
+                success: function (res) {
+                    layer.msg('关联用户<br/>' + res.data.user.username +' -- ' + res.data.user.telephone
+                        + '<br/><br/>关联课程<br/>' + res.data.course.cKeyword + " -- " + res.data.course.cname);
+                }
+            });
+        });
+
         function reloadTable() {
             console.log("执行了reloadTable");
             table.reload('demo', {

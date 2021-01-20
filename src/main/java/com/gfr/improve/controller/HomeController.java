@@ -182,4 +182,25 @@ public class HomeController {
         }
     }
 
+    /**
+     * 返回添加用户页面
+     * @return
+     */
+    @ApiIgnore
+    @RequestMapping("getAddUser")
+    public String getAddUser(){
+        return "addUser";
+    }
+
+
+    /**
+     * 返回添加身体信息页面
+     * @return
+     */
+    @ApiIgnore
+    @RequestMapping("getAddBody")
+    public String getAddBody(){
+        return "addBody";
+    }
+
 }

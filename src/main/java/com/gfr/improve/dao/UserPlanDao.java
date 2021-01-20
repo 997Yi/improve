@@ -31,7 +31,6 @@ public interface UserPlanDao {
      */
     List<UserPlan> queryAllByLimit(@Param("offset") int offset, @Param("limit") int limit);
 
-
     /**
      * 通过实体作为筛选条件查询
      *
@@ -39,6 +38,31 @@ public interface UserPlanDao {
      * @return 对象列表
      */
     List<UserPlan> queryAll(UserPlan userPlan);
+
+    /**
+     * 获取数据量
+     * @return
+     */
+    Integer getCount();
+
+    /**
+     * 查询条件数据
+     * @param condition
+     * @param offset
+     * @param limit
+     * @return
+     */
+    List<UserPlan> queryByCondition(@Param("condition") String condition,@Param("offset") Integer offset, @Param("limit")Integer limit);
+
+    /**
+     * 查询条件数据总量
+     * @param condition
+     * @return
+     */
+    Integer getLikeCount(@Param("condition") String condition);
+
+
+
 
     /**
      * 新增数据
@@ -64,6 +88,9 @@ public interface UserPlanDao {
      */
     int insertOrUpdateBatch(@Param("entities") List<UserPlan> entities);
 
+
+
+
     /**
      * 修改数据
      *
@@ -72,33 +99,14 @@ public interface UserPlanDao {
      */
     int update(UserPlan userPlan);
 
+
+
+
     /**
      * 删除所有该计划(userId、 planId、 userId + planId)对应的用户-计划
      * @param userPlan
      * @return
      */
     int delete(UserPlan userPlan);
-
-    /**
-     * 获取数据量
-     * @return
-     */
-    Integer getCount();
-
-    /**
-     * 查询条件数据
-     * @param condition
-     * @param offset
-     * @param limit
-     * @return
-     */
-    List<UserPlan> queryByCondition(@Param("condition") String condition,@Param("offset") Integer offset, @Param("limit")Integer limit);
-
-    /**
-     * 查询条件数据总量
-     * @param condition
-     * @return
-     */
-    Integer getLikeCount(@Param("condition") String condition);
 
 }

@@ -52,16 +52,12 @@
             </div>
         </div>
 
-
-        <!--        TODO视频播放 无法播放 -->
         <div class="layui-upload-drag" id="test11">
             <i class="layui-icon"></i>
             <p>点击上传视频，或将文件拖拽到此处</p>
             <div class="layui-hide" id="uploadDemoView1">
                 <hr>
-                <video style="max-width: 196px" autoplay="autoplay" controls="controls" loop="loop">
-                    <source src="" type="video/mp4"/>
-                </video>
+                <video style="max-width: 196px"  controls="controls" src="" autoplay="autoplay"></video>
                 <input type="text" name="cvurl" class="layui-input layui-hide"/>
             </div>
         </div>
@@ -103,7 +99,7 @@
             , url: 'upfile' //改成您自己的上传接口
             , accept: 'video'
             , done: function (res) {
-                layui.$('#uploadDemoView1').removeClass('layui-hide').find('video').find('source').attr('src', res.data);
+                layui.$('#uploadDemoView1').removeClass('layui-hide').find('video').attr('src', res.data);
                 layui.$('#uploadDemoView1').find('input').val(res.data);
             }
         });

@@ -63,10 +63,10 @@ public class CourseController {
      * 根据id删除数据
      */
     @ApiOperation(value = "deleteCourse",notes = "根据id删除数据")
-    @ApiImplicitParam(name="cid",value = "需要删除的数据id",type = "int")
-    @DeleteMapping("deleteCourse/{cid}")
-    public ResponseData deleteCourse(@PathVariable("cid")Integer cid){
-        return courseService.deleteById(String.valueOf(cid));
+    @ApiImplicitParam(name="cid",value = "需要删除的数据id",type = "string")
+    @DeleteMapping("deleteCourse")
+    public ResponseData deleteCourse(@RequestBody Course course){
+        return courseService.deleteById(course.getCId());
     }
 
     /**

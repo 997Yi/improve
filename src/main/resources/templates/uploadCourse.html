@@ -57,7 +57,7 @@
             <p>点击上传视频，或将文件拖拽到此处</p>
             <div class="layui-hide" id="uploadDemoView1">
                 <hr>
-                <video style="max-width: 196px"  controls="controls" src="" autoplay="autoplay"></video>
+                <video style="max-width: 196px" controls="controls" src="" autoplay="autoplay"></video>
                 <input type="text" name="cvurl" class="layui-input layui-hide"/>
             </div>
         </div>
@@ -86,7 +86,6 @@
             , accept: 'images'
             , done: function (res) {
                 //将隐藏的模块显现
-                console.log(res.data);
                 layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', res.data);
                 layui.$('#uploadDemoView').find('input').val(res.data);
             }
@@ -101,7 +100,7 @@
             , done: function (res) {
                 layui.$('#uploadDemoView1').removeClass('layui-hide').find('video').attr('src', res.data);
                 layui.$('#uploadDemoView1').find('input').val(res.data);
-            }
+            },
         });
 
         //提交表单
@@ -118,12 +117,20 @@
                 data: JSON.stringify(data.field),
                 contentType: "application/json",
                 success: function (res) {
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000);
                     layer.msg(res.msg);
                 },
                 error: function () {
-                    layer.msg(res.msg);
+                    setTimeout(function () {
+                        location.reload();
+                    }, 2000);
+                    layer.msg("操作失败~请重新操作");
+
                 }
             })
+            return false;
         });
     });
 </script>

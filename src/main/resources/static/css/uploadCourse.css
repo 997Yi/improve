@@ -1,6 +1,10 @@
-.layui-form{
-    margin-left: 30%;
-}
+
 .layui-form-item{
     margin-top: 5px;
+    margin-left: 34%;
+}
+.layui-upload-drag{
+    margin-left: 25%;
+    margin-right: -20%;
+    vertical-align: top;
 }

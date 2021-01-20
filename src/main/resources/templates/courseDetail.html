@@ -33,6 +33,38 @@
 </script>
 <script src="layui/layui.js" type="text/javascript"></script>
 <script type="text/javascript">
+
+    var tipsImgVal=null;
+
+    function showImgTips(url){
+        layui.use('layer',function () {
+            tipsImgVal = layer.tips('<img src="'+url+'" width="200px"/>', '#courseImg', {
+                tips: 4,
+                anim: 5,
+                tips: [4, 'rgba(255,255,255,0)']
+            });
+        })
+    }
+
+    function closeImgTips(){
+        layer.close(tipsImgVal);
+    }
+
+    var tipsVidVal=null;
+
+    function showVidTips(url){
+        layui.use('layer',function () {
+            tipsVidVal = layer.tips('<video src="'+url+'" width="200px" autoplay="autoplay"/>', '#courseVid', {
+                tips: 4,
+                tips: [4, 'rgba(255,255,255,0)']
+            });
+        })
+    }
+
+    function closeVidTips(){
+        layer.close(tipsVidVal);
+    }
+
     layui.use(['table', 'form'], function () {
         var table = layui.table,
             $ = layui.jquery;
@@ -70,7 +102,7 @@
                     align: 'center',
                     edit: 'text'
                 }
-                , {
+                    , {
                     field: 'cdescribe',
                     title: '描述',
                     align: 'center',
@@ -80,7 +112,7 @@
                     title: '图片',
                     align: 'center',
                     templet: function (res) {
-                        return '<img src="' + res.cpurl + '" />';
+                        return '<img id="courseImg" src="' + res.cpurl + '" onmouseover="showImgTips(\' ' + res.cpurl + ' \')" onmouseleave="closeImgTips()"/>';
                     }
                 }, {
                     field: 'cvurl',
@@ -88,7 +120,7 @@
                     title: '视频',
                     align: 'center',
                     templet: function (res) {
-                        return '<video src="'+res.cvurl+'" controls="controls"> </video>';
+                        return '<video id="courseVid" src="' + res.cvurl + '" controls="controls" onmouseover="showVidTips(\' ' + res.cvurl + ' \')" onmouseleave="closeVidTips()"/>';
                     }
                 }, {
                     field: 'ctime',
@@ -124,8 +156,6 @@
                     } else {
                         layer.msg(res.msg, {icon: 2});
                     }
-                    //请求成功以后的回调函数
-                    console.log("success");
                 },
                 error: function () {
                     layer.msg("error", {icon: 2});
@@ -142,9 +172,12 @@
                     //向服务端发送删除指令
                     $.ajax({
                         type: "DELETE",
-                        url: "course/deleteCourse/" + data.cid,
+                        url: "course/deleteCourse/",
                         contentType: "application/json",
                         dataType: "json",
+                        data:JSON.stringify({
+                            cid:data.cid
+                        }),
                         success: function (res) {
                             if (res.code == 200) {
                                 obj.del(); //删除对应行（tr）的DOM结构
@@ -153,8 +186,6 @@
                             } else {
                                 layer.msg(res.msg, {icon: 2});
                             }
-                            //请求成功以后的回调函数
-                            console.log("success");
                         }
                     })
                 });
@@ -182,9 +213,9 @@
         $("#btn").on('click', function () {
             var checkStatus = table.checkStatus('demo')
                 , data = checkStatus.data;
-            var cids="";
+            var cids = "";
             for (var i = 0; i < data.length; i++) {
-                cids += data[i].cid+"@";
+                cids += data[i].cid + "@";
             }
             $.ajax({
                 type: "DELETE",
@@ -204,8 +235,6 @@
                     } else {
                         layer.msg(res.msg, {icon: 2});
                     }
-                    //请求成功以后的回调函数
-                    console.log("success");
                 }
             })
         });

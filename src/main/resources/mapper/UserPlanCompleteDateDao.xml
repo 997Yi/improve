@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gfr.improve.dao.UserPlanCompleteDateDao">
+    <resultMap type="com.gfr.improve.entity.UserPlanCompleteDate" id="UserPlanCompleteDateMap">
+        <result property="userId" column="user_id" jdbcType="VARCHAR"/>
+        <result property="planCompleteDate" column="plan_complete_date" jdbcType="datetime"/>
+    </resultMap>
+
+    <insert id="insert">
+        insert into user_plan_complete_date
+        values (#{userId}, #{planCompleteDate});
+    </insert>
+
+    <delete id="delete">
+        delete
+        from improve.user_plan_complete_date
+        where user_id = #{userId}
+    </delete>
+</mapper>

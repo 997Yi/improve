@@ -69,4 +69,10 @@ public interface CourseService {
      * @return
      */
     ResponseData deleteCourseList(String courses);
+
+    /**
+     * 查询所有不重复的keyword作为导航栏内容
+     * @return
+     */
+    ResponseData queryAllKeyword();
 }

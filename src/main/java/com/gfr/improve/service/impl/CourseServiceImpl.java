@@ -154,6 +154,8 @@ public class CourseServiceImpl implements CourseService {
         List<Course> courseList = null;
         Integer count = null;
         if (value != null) {
+            if(value.equals("热门"))
+                value="";
             courseList = courseDao.queryByLike(value, offset, limit);
             count = courseDao.countByLike(value);
         } else {
@@ -193,5 +195,16 @@ public class CourseServiceImpl implements CourseService {
                 return new ResponseData(ResponseCode.FAILED, "failed");
             }
         }
+    }
+
+    /**
+     * 查询所有不重复的keyword作为导航栏内容
+     * @return
+     */
+    @Override
+    public ResponseData queryAllKeyword() {
+        List<String> list = courseDao.queryAllKeyword();
+        list.add(0,"热门");
+        return new ResponseData(ResponseCode.SUCCESS,list);
     }
 }

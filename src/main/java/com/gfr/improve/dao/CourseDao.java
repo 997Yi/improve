@@ -101,4 +101,10 @@ public interface CourseDao {
      * @return
      */
     Integer countByLike(String value);
+
+    /**
+     * 查询所有不重复的keyword作为导航栏内容
+     * @return
+     */
+    List<String> queryAllKeyword();
 }

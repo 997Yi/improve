@@ -17,6 +17,14 @@
         c_id,c_name,c_describe,c_vurl,c_purl,c_time,c_keyword
     </sql>
 
+    <!--    查询所有不重复的keyword作为导航栏内容-->
+    <select id="queryAllKeyword" resultType="java.lang.String">
+        select
+        distinct c_keyword
+        from improve.course
+        limit 0, 3
+    </select>
+
     <!--    模糊查询数据量-->
     <select id="countByLike" resultType="java.lang.Integer">
         select count(c_id) from course
@@ -30,7 +38,9 @@
 
     <!--    模糊查询-->
     <select id="queryByLike" resultMap="CourseMap">
-        select <include refid="courseSql"/> from course
+        select
+        <include refid="courseSql"/>
+        from course
         where
         c_name like concat("%",#{value},"%")
         or
@@ -102,7 +112,7 @@
     </select>
 
     <!--新增所有列-->
-    <insert id="insert" >
+    <insert id="insert">
         <selectKey keyProperty="cId" resultType="String" order="BEFORE">
             select uuid();
         </selectKey>

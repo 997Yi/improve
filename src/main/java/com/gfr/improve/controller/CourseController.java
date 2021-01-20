@@ -4,6 +4,7 @@ import com.gfr.improve.entity.Course;
 import com.gfr.improve.result.ResponseCode;
 import com.gfr.improve.result.ResponseData;
 import com.gfr.improve.service.CourseService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -116,6 +117,15 @@ public class CourseController {
     @PostMapping("insertCourse")
     public ResponseData insertCourse(@RequestBody Course course){
         return courseService.insert(course);
+    }
+
+    /**
+     * 查询所有不重复的keyword作为导航栏内容
+     */
+    @ApiOperation(value = "queryAllKeyword",notes = "查询所有不重复的keyword作为导航栏内容")
+    @GetMapping("queryAllKeyword")
+    public ResponseData queryAllKeyword(){
+        return courseService.queryAllKeyword();
     }
 
 }

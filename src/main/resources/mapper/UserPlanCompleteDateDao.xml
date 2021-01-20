@@ -3,7 +3,7 @@
 <mapper namespace="com.gfr.improve.dao.UserPlanCompleteDateDao">
     <resultMap type="com.gfr.improve.entity.UserPlanCompleteDate" id="UserPlanCompleteDateMap">
         <result property="userId" column="user_id" jdbcType="VARCHAR"/>
-        <result property="planCompleteDate" column="plan_complete_date" jdbcType="datetime"/>
+        <result property="planCompleteDate" column="plan_complete_date" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <insert id="insert">

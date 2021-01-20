@@ -64,7 +64,7 @@ public interface CourseService {
     ResponseData queryByLike(String value, Integer page, Integer limit);
 
     /**
-     * 增加课程
+     * 删除课程
      * @param courses
      * @return
      */

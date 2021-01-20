@@ -121,8 +121,8 @@ public class CourseServiceImpl implements CourseService {
         try {
             if (courseDao.deleteById(cId) > 0) {
                 isSussecc = true;
+                planService.deleteByCourseId(cId);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

@@ -5,6 +5,7 @@ import com.gfr.improve.entity.Course;
 import com.gfr.improve.result.ResponseCode;
 import com.gfr.improve.result.ResponseData;
 import com.gfr.improve.service.CourseService;
+import com.gfr.improve.service.PlanService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -22,6 +23,9 @@ import java.util.List;
 public class CourseServiceImpl implements CourseService {
     @Resource
     private CourseDao courseDao;
+
+    @Resource
+    private PlanService planService;
 
     /**
      * 通过ID查询单条数据
@@ -115,8 +119,10 @@ public class CourseServiceImpl implements CourseService {
     public ResponseData deleteById(String cId) {
         boolean isSussecc = false;
         try {
-            if (courseDao.deleteById(cId) > 0)
+            if (courseDao.deleteById(cId) > 0) {
                 isSussecc = true;
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -175,6 +181,7 @@ public class CourseServiceImpl implements CourseService {
                     isSussecc = false;
                     break;
                 }
+                planService.deleteByCourseId(s);
             }
         } catch (Exception e) {
             e.printStackTrace();

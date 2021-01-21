@@ -44,7 +44,8 @@ public class UserPlanCompleteDateServiceImpl implements UserPlanCompleteDateServ
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SS");
             String date = sdf.format(upcd.getPlanCompleteDate());
             if (date.substring(0,4).equals(year.toString()) &&  date.substring(5,7).equals(monthStr)){
-                dateList.add(date.substring(8,10));
+                Integer a = Integer.parseInt(date.substring(8,10));
+                dateList.add(a.toString());
             }
         }
         System.out.println(dateList);

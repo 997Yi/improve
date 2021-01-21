@@ -1,6 +1,7 @@
 package com.gfr.improve.controller;
 
 import com.gfr.improve.entity.Body;
+import com.gfr.improve.entity.User;
 import com.gfr.improve.result.ResponseCode;
 import com.gfr.improve.result.ResponseData;
 import com.gfr.improve.service.BodyService;
@@ -26,6 +27,22 @@ public class BodyController {
      */
     @Resource
     private BodyService bodyService;
+
+    /**
+     * 通过主键查询单条数据
+     *
+     * @param id 主键
+     * @return 单条数据
+     */
+    @GetMapping("selectOne")
+    @ResponseBody
+    public ResponseData selectOne(String id) {
+        Body body = this.bodyService.queryById(id);
+        if(body != null){
+            return new ResponseData(ResponseCode.SUCCESS, body);
+        }
+        return new ResponseData(ResponseCode.FAILED);
+    }
 
     @ApiOperation(value = "queryAll", notes = "查询所有的身体信息")
     @ApiImplicitParams(

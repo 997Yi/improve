@@ -48,7 +48,7 @@ public class UserPlanCompleteDateServiceImpl implements UserPlanCompleteDateServ
                 dateList.add(a.toString());
             }
         }
-        System.out.println(dateList);
+        dateList.sort((s1,s2) -> (Integer.parseInt(s1) - Integer.parseInt(s2)));
         return new ResponseData(ResponseCode.SUCCESS, dateList, dateList.size());
     }
 }

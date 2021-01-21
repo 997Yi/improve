@@ -99,14 +99,11 @@
     <update id="update">
         update improve.user_plan
         <set>
-            <if test="planId != null">
-                plan_id = #{planId},
-            </if>
             <if test="checktime != null">
                 checktime = #{checktime},
             </if>
         </set>
-        where user_id = #{userId}
+        where user_id = #{userId} and plan_id = #{planId}
     </update>
 
     <!--通过主键删除-->

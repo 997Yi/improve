@@ -9,6 +9,7 @@ import com.gfr.improve.result.ResponseCode;
 import com.gfr.improve.result.ResponseData;
 import com.gfr.improve.service.PlanService;
 import com.gfr.improve.service.UserPlanService;
+import com.gfr.improve.util.DateUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.event.TransactionalEventListener;
@@ -16,10 +17,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.annotation.Resource;
 import javax.print.attribute.HashAttributeSet;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * (Plan)表服务实现类
@@ -110,7 +108,8 @@ public class PlanServiceImpl implements PlanService {
             UserPlan userPlan = new UserPlan();
             userPlan.setPlanId(planId);
 
-            return userPlanDao.delete(userPlan) != 0;
+            userPlanDao.delete(userPlan);
+            return true;
         }
         return false;
     }
@@ -168,6 +167,33 @@ public class PlanServiceImpl implements PlanService {
     }
 
 
+    @Override
+    public ResponseData queryNewPlan() {
+        Plan time = new Plan();
+        time.setPlanStart(DateUtil.getStart());
+
+        //查询当日发布的所有计划
+        List<Plan> plans = planDao.queryAll(time);
+        List<Map<String, Object>> resList = new LinkedList<>();
+        Map<String, Object> map;
+
+        for(Plan plan : plans){
+            //对每一个计划，进行课程查询
+            map = new HashMap<>();
+
+            map.put("plan", plan);
+            map.put("course", courseDao.queryById(plan.getCourseId()));
+
+            UserPlan userPlan = new UserPlan();
+            userPlan.setPlanId(plan.getPlanId());
+
+            map.put("peopleNum", userPlanDao.queryAll(userPlan).size());
+
+            resList.add(map);
+        }
+
+        return new ResponseData(ResponseCode.SUCCESS, resList);
+    }
 
     /**
      * 删除课程对应的计划

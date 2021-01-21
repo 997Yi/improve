@@ -44,6 +44,12 @@ public interface PlanService {
      */
     Map<Plan, String> queryAllPlanWithName();
 
+    /**
+     * 查询当日最新的计划
+     * @param id
+     * @return
+     */
+    ResponseData queryNewPlan();
 
 
 

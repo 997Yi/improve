@@ -67,7 +67,7 @@
                 and plan_id = #{planId}
             </if>
             <if test="planStart != null">
-                and plan_start = #{planStart}
+                and DATE(plan_start) = DATE(#{planStart})
             </if>
             <if test="planEnd != null">
                 and plan_end = #{planEnd}

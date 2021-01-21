@@ -7,6 +7,7 @@ import com.gfr.improve.entity.UserPlan;
 import com.gfr.improve.result.ResponseCode;
 import com.gfr.improve.result.ResponseData;
 import com.gfr.improve.service.UserPlanService;
+import com.gfr.improve.util.DateUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -67,6 +68,11 @@ public class UserPlanServiceImpl implements UserPlanService {
      */
     @Override
     public Boolean insert(UserPlan userPlan) {
+        //没有对用户设置上次打卡时间，则默认填入昨天
+        if(userPlan.getChecktime() == null){
+            userPlan.setChecktime(DateUtil.addDay(DateUtil.getStart(), -1));
+        }
+
         if(userPlanDao.insert(userPlan) > 0){
             return true;
         }

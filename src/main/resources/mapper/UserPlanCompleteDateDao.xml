@@ -14,6 +14,12 @@
     <delete id="delete">
         delete
         from improve.user_plan_complete_date
-        where user_id = #{userId}
+        where user_id = #{userId};
     </delete>
+    
+    <select id="queryDate" resultMap="UserPlanCompleteDateMap">
+        select plan_complete_date
+        from improve.user_plan_complete_date
+        where user_id = #{userId};
+    </select>
 </mapper>

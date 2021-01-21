@@ -101,4 +101,13 @@ public class PlanController {
     }
 
 
+
+    @ApiOperation(value = "listNewPlan", notes = "查询当天开始的计划")
+    @GetMapping("listNew")
+    @ResponseBody
+    public ResponseData listNewPlan(){
+        return planService.queryNewPlan();
+    }
+
+
 }

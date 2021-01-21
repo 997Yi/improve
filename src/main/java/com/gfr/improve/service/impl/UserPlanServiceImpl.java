@@ -172,4 +172,18 @@ public class UserPlanServiceImpl implements UserPlanService {
         return true;
     }
 
+
+    /**
+     * 查询所有该用户的user-plan
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<UserPlan> queryByUserId(String userId){
+        UserPlan userPlan = new UserPlan();
+        userPlan.setUserId(userId);
+
+        return userPlanDao.queryAll(userPlan);
+    }
+
 }

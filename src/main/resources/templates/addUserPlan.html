@@ -65,7 +65,7 @@
                     parent.layer.close(index); //再执行关闭
                 },
                 error: function (res){
-                    layer.msg("添加失败！");
+                    layer.msg("添加失败！ 用户可能已经拥有该计划了");
                 }
             });
             return false;

@@ -40,7 +40,12 @@ public interface UserPlanService {
      */
     ResponseData queryByConditions(String condition, Integer page, Integer limit);
 
-
+    /**
+     * 通过用户的id查询所有的有关计划
+     * @param userId
+     * @return
+     */
+    List<UserPlan> queryByUserId(String userId);
 
 
 
@@ -99,4 +104,5 @@ public interface UserPlanService {
      * @return
      */
     boolean deleteByUserId(List<String> userId);
+
 }

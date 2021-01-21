@@ -10,6 +10,8 @@ import com.gfr.improve.service.CourseService;
 import com.gfr.improve.service.PlanService;
 import com.gfr.improve.service.UserPlanService;
 import com.gfr.improve.service.UserService;
+import com.gfr.improve.util.DateUtil;
+import com.sun.org.apache.regexp.internal.RE;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -133,6 +136,36 @@ public class UserPlanController {
 
             return new ResponseData(ResponseCode.SUCCESS, resMap);
         }
+    }
+
+
+
+    @ApiOperation(value = "queryInfo", notes = "查询用户-计划对应的详细信息，例如用户名称和课程名称")
+    @GetMapping("queryInfo/{userId}")
+    @ResponseBody
+    public ResponseData queryInfo(@PathVariable("userId") String userId){
+        if(userId != null){
+            List<Map<String, Object>> resList = new LinkedList<>();
+            Map<String, Object> map;
+
+            List<UserPlan> userPlanList = userPlanService.queryByUserId(userId);
+            for(UserPlan userPlan : userPlanList){
+                //对每一个用户-计划进行遍历
+                map = new HashMap<>();
+
+                //判断当前任务是否完成，并且将完成信息存入
+                map.put("finish", DateUtil.checkTime(userPlan.getChecktime()));
+
+                Plan plan = planService.queryById(userPlan.getPlanId());
+                map.put("plan", plan);
+                map.put("course", courseService.queryById(plan.getCourseId()));
+
+                resList.add(map);
+            }
+
+            return new ResponseData(ResponseCode.SUCCESS, resList);
+        }
+        return new ResponseData(ResponseCode.FAILED);
     }
 
 }

@@ -1,6 +1,7 @@
 package com.gfr.improve.controller;
 
 import com.fasterxml.jackson.databind.deser.impl.NullsAsEmptyProvider;
+import com.gfr.improve.entity.Plan;
 import com.gfr.improve.entity.User;
 import com.gfr.improve.result.ResponseCode;
 import com.gfr.improve.result.ResponseData;
@@ -30,6 +31,26 @@ public class UserController {
      */
     @Resource
     private UserService userService;
+
+
+
+
+    /**
+     * 通过主键查询单条数据
+     *
+     * @param id 主键
+     * @return 单条数据
+     */
+    @GetMapping("selectOne")
+    @ResponseBody
+    public ResponseData selectOne(String id) {
+        User user = this.userService.queryById(id);
+        if(user != null){
+            return new ResponseData(ResponseCode.SUCCESS, user);
+        }
+        return new ResponseData(ResponseCode.FAILED);
+    }
+
 
 
     @ApiOperation(value = "queryAll", notes = "查询所有的用户信息")

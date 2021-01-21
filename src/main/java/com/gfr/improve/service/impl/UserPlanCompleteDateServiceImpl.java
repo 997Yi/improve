@@ -39,12 +39,12 @@ public class UserPlanCompleteDateServiceImpl implements UserPlanCompleteDateServ
             monthStr +=  month;
         }
         List<UserPlanCompleteDate> upcdList = userPlanCompleteDateDao.queryDate(userId);
-        List<Integer> dateList = new ArrayList<>();
+        List<String> dateList = new ArrayList<>();
         for (UserPlanCompleteDate upcd : upcdList){
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SS");
             String date = sdf.format(upcd.getPlanCompleteDate());
             if (date.substring(0,4).equals(year.toString()) &&  date.substring(5,7).equals(monthStr)){
-                dateList.add(Integer.parseInt(date.substring(8,10)));
+                dateList.add(date.substring(8,10));
             }
         }
         System.out.println(dateList);

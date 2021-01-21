@@ -10,4 +10,6 @@ public interface UserPlanCompleteDateService {
     ResponseData delete(String userId);
 
     ResponseData queryDate(String userId, Integer year, Integer month);
+
+    ResponseData isAllPlanComplete(UserPlanCompleteDate userPlanCompleteDate);
 }

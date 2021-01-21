@@ -37,4 +37,10 @@ public class UserPlanCompleteDateController {
     public ResponseData insert(@RequestBody UserPlanCompleteDate userPlanCompleteDate){
         return userPlanCompleteDateService.insert(userPlanCompleteDate);
     }
+
+    @ApiOperation(value = "isAllPlanComplete",notes = "上月打卡是否全勤")
+    @PostMapping("isAllPlanComplete")
+    public ResponseData isAllPlanComplete(@RequestBody UserPlanCompleteDate userPlanCompleteDate){
+        return userPlanCompleteDateService.isAllPlanComplete(userPlanCompleteDate);
+    }
 }

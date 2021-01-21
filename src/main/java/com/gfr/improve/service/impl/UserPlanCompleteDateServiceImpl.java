@@ -9,9 +9,9 @@ import com.gfr.improve.service.UserPlanCompleteDateService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service("userPlanCompleteDateService")
@@ -21,13 +21,14 @@ public class UserPlanCompleteDateServiceImpl implements UserPlanCompleteDateServ
     private UserPlanCompleteDateDao userPlanCompleteDateDao;
 
     @Override
-    public int insert(UserPlanCompleteDate userPlanCompleteDate) {
-        return userPlanCompleteDateDao.insert(userPlanCompleteDate);
+    public ResponseData insert(UserPlanCompleteDate userPlanCompleteDate) {
+        userPlanCompleteDate.setPlanCompleteDate(new Date(System.currentTimeMillis()));
+        return new ResponseData(ResponseCode.SUCCESS, userPlanCompleteDateDao.insert(userPlanCompleteDate) == 1);
     }
 
     @Override
-    public int delete(String userId) {
-        return userPlanCompleteDateDao.delete(userId);
+    public ResponseData delete(String userId) {
+        return new ResponseData(ResponseCode.SUCCESS, userPlanCompleteDateDao.delete(userId) == 1);
     }
 
     @Override

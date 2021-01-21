@@ -1,14 +1,13 @@
 package com.gfr.improve.controller;
 
+import com.gfr.improve.entity.UserPlanCompleteDate;
 import com.gfr.improve.result.ResponseData;
 import com.gfr.improve.service.UserPlanCompleteDateService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -32,5 +31,10 @@ public class UserPlanCompleteDateController {
     public ResponseData queryDate(String userId, Integer year, Integer month){
         return userPlanCompleteDateService.queryDate(userId, year, month);
     }
-    
+
+    @ApiOperation(value = "insert",notes = "查询打卡日期")
+    @PutMapping("insert")
+    public ResponseData insert(@RequestBody UserPlanCompleteDate userPlanCompleteDate){
+        return userPlanCompleteDateService.insert(userPlanCompleteDate);
+    }
 }

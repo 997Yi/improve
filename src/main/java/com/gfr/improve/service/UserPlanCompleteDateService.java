@@ -5,9 +5,9 @@ import com.gfr.improve.result.ResponseData;
 
 public interface UserPlanCompleteDateService {
 
-    int insert(UserPlanCompleteDate userPlanCompleteDate);
+    ResponseData insert(UserPlanCompleteDate userPlanCompleteDate);
 
-    int delete(String userId);
+    ResponseData delete(String userId);
 
     ResponseData queryDate(String userId, Integer year, Integer month);
 }

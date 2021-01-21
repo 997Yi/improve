@@ -22,7 +22,7 @@
         select
         distinct c_keyword
         from improve.course
-        limit 0, 3
+        limit 0, 4
     </select>
 
     <!--    模糊查询数据量-->

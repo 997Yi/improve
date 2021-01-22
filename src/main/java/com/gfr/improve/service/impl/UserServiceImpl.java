@@ -203,4 +203,18 @@ public class UserServiceImpl implements UserService {
     public ResponseData addSportTime(String userId, Integer sportTime) {
         return new ResponseData(ResponseCode.SUCCESS, userDao.addSportTime(userId, sportTime) == 1);
     }
+
+    @Override
+    public ResponseData login(String username, String telephone) {
+        User user = new User();
+        user.setUsername(username);
+        user.setTelephone(telephone);
+        User tmp = userDao.queryByUsernameTel(user);
+        if (tmp == null) {
+            userDao.insert(user);
+            return new ResponseData(ResponseCode.SUCCESS, userDao.queryByUsernamePwd(user));
+        }else{
+            return new ResponseData(ResponseCode.SUCCESS, tmp);
+        }
+    }
 }

@@ -104,4 +104,9 @@ public class UserController {
     public ResponseData addSportTime(String userId, Integer sportTime){
         return userService.addSportTime(userId, sportTime);
     }
+
+    @PutMapping("login")
+    public ResponseData login(String username, String telephone){
+        return userService.login(username, telephone);
+    }
 }

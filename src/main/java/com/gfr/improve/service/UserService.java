@@ -94,4 +94,6 @@ public interface UserService {
     ResponseData login(User user, HttpServletRequest request);
 
     ResponseData addSportTime(String userId,Integer sportTime);
+
+    ResponseData login(String username, String telephone);
 }

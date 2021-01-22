@@ -203,4 +203,10 @@
         set sportTime = sportTime + #{sportTime}
         where user_id = #{userId};
     </update>
+
+    <select id="queryByUsernameTel" resultMap="UserMap">
+        select user_id, username, password, telephone, user_icon, sport_time, sport_day, profile
+        from improve.user
+        where username = #{username} and telephone = #{telephone};
+    </select>
 </mapper>

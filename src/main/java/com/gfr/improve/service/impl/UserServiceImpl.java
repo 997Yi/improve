@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService {
      * @return 实例对象
      */
     @Override
+    @Transactional
     public User queryById(String userId) {
         User user = new User();
         user.setUserId(userId);
@@ -207,6 +208,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public ResponseData login(String username, String telephone) {
         User user = new User();
         user.setUsername(username);

@@ -76,8 +76,12 @@
             <artifactId>swagger-ui-layer</artifactId>
             <version>1.1.2</version>
         </dependency>
-
-
+        <!--验证码-->
+        <dependency>
+            <groupId>it.source</groupId>
+            <artifactId>ValidataCode</artifactId>
+            <version>1.0</version>
+        </dependency>
 
     </dependencies>
 

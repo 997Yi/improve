@@ -1,107 +1,92 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
+<html>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>Improve - 后台管理</title>
-    <link rel="stylesheet" href="../static/layui/css/layui.css" th:href="@{/layui/css/layui.css}">
+    <title>登录</title>
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css"/>
 </head>
 
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
-        <div class="layui-logo">Improve管理系统</div>
+        <div class="layui-logo">improve - 管理员登录</div>
         <!-- 头部区域（可配合layui已有的水平导航） -->
-
         <ul class="layui-nav layui-layout-right">
-            <li class="layui-nav-item">
-                <a href="javascript:;">
-                    <img src="../static/img/default.png" class="layui-nav-img" th:src="@{/img/default.png}"> 贤心
+            <li class="layui-nav-item  layui-this">
+                <a href="/getIndex">
+                    点击登录
                 </a>
-                <dl class="layui-nav-child">
-                    <dd>
-                        <a href="">基本资料</a>
-                    </dd>
-                    <dd>
-                        <a href="">安全设置</a>
-                    </dd>
-                </dl>
-            </li>
-            <li class="layui-nav-item">
-                <a href="">退出登录</a>
             </li>
         </ul>
     </div>
 
-    <!--左侧导航栏-->
-    <div class="layui-side layui-bg-black">
-        <div class="layui-side-scroll">
-            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-            <ul class="layui-nav layui-nav-tree" lay-filter="test">
-                <li class="layui-nav-item layui-nav-itemed">
-                    <a class="" href="javascript:;">用户Body信息管理</a>
-                    <dl class="layui-nav-child">
-                        <dd>
-                            <a href="/getBodyList" target="ifr">Body信息</a>
-                        </dd>
-                    </dl>
-                </li>
-
-                <li class="layui-nav-item">
-                    <a class="" href="javascript:;">课程管理</a>
-                    <dl class="layui-nav-child">
-                        <dd>
-                            <a href="/getCourseDetail" target="ifr">课程信息</a>
-                        </dd>
-                    </dl>
-                    <dl class="layui-nav-child">
-                        <dd>
-                            <a href="/getUploadCourse" target="ifr">上传课程</a>
-                        </dd>
-                    </dl>
-                </li>
-
-                <li class="layui-nav-item">
-                    <a class="" href="/getPlanDetail" target="ifr">每日计划管理</a>
-                    <dl class="layui-nav-child">
-                        <dd>
-                            <a href="/getPlanDetail" target="ifr">课程 - 计划</a>
-                        </dd>
-                    </dl>
-                    <dl class="layui-nav-child">
-                        <dd>
-                            <a href="/getUserPlanDetail" target="ifr">用户 - 计划</a>
-                        </dd>
-                    </dl>
-                </li>
-
-                <li class="layui-nav-item">
-                    <a class="" href="javascript:;">用户信息管理</a>
-                    <dl class="layui-nav-child">
-                        <dd>
-                            <a href="/getUserList" target="ifr">用户信息</a>
-                        </dd>
-                    </dl>
-                </li>
-
-            </ul>
-        </div>
+    <div class="layui-input-block" style="border: 1px solid #e0e0e0; width: 50%; margin: 150px auto; padding: 30px 0 10px 0;background-color: #f8f8f8;">
+        <h2 style="text-align: center; margin-bottom: 30px">登录页面</h2>
+        <form class="layui-form" action="" style="width: 80%; margin: 0 auto">
+            <div style="margin: 0 auto; width: 60%" >
+                <div class="layui-form-item" >
+                    <div class="layui-input-block" style="margin-left: 0px;">
+                        <input type="text" name="username" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="margin-left: 0px;">
+                        <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block" style="margin: 0px;">
+                        <input type="text" name="validCode" required lay-verify="required" placeholder="输入验证码" autocomplete="off" class="layui-input" style="width: 60%; margin:0; display:inline-block;"
+                        ><img src="getCode" style="height: auto; width: 30%; margin-left: 10%;">
+                    </div>
+                </div>
+            </div>
+            <div style="margin: 0 auto; width: 40%" >
+                <div class="layui-form-item">
+                </div>
+                <div class="layui-input-block" style="margin-left: 0px; text-align: center;">
+                    <button class="layui-btn" lay-submit lay-filter="formDemo">登录</button>
+                    <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                </div>
+            </div>
+        </form>
     </div>
 
-    <div class="layui-body">
-        <!-- 实现页面的局部跳转-->
-        <iframe name="ifr" src="" width="100%" height="100%"></iframe>
-    </div>
 </div>
-<script src="../static/layui/layui.js" th:src="@{/layui/layui.js}"></script>
-<script>
-    //JavaScript代码区域
-    layui.use('element', function () {
-        var element = layui.element;
 
+<script src="layui/layui.js" type="text/javascript"></script>
+<script>
+    layui.use(['form', 'element'], function () {
+        var form = layui.form,
+            $ = layui.jquery;
+
+        //监听提交
+        form.on('submit(formDemo)', function (data) {
+            $.ajax({
+                type: "POST",
+                url: "login",
+                dataType: "json",
+                //这里使用了用户类的个性签名作为验证码的接受
+                data: JSON.stringify({
+                    'username':data.field.username,
+                    'password':data.field.password,
+                    'profile':data.field.validCode
+                }),
+                contentType: "application/json",
+                success: function (res) {
+                    if (res.code == 200) {
+                        layer.msg(res.msg, {icon: 1});
+                        window.location.href = "/getMain"
+                    } else {
+                        layer.msg(res.msg, {icon: 2});
+                    }
+                }
+
+            });
+            return false;
+        });
     });
 </script>
-</body>
 
+</body>
 </html>

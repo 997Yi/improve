@@ -3,6 +3,7 @@ package com.gfr.improve.service;
 import com.gfr.improve.entity.User;
 import com.gfr.improve.result.ResponseData;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -84,4 +85,11 @@ public interface UserService {
     ResponseData deleteUsers(List<String> userIdList);
 
     ResponseData addUser(User user);
+
+    /**
+     * 管理员登录
+     * @param request
+     * @return
+     */
+    ResponseData login(User user, HttpServletRequest request);
 }

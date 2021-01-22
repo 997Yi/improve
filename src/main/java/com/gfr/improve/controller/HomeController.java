@@ -1,5 +1,7 @@
 package com.gfr.improve.controller;
 
+import cn.dsna.util.images.ValidateCode;
+import com.gfr.improve.entity.User;
 import com.gfr.improve.result.ResponseCode;
 import com.gfr.improve.result.ResponseData;
 import com.gfr.improve.util.UpUtils;
@@ -10,15 +12,16 @@ import com.gfr.improve.service.UserPlanService;
 import com.gfr.improve.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 
 /**
@@ -38,6 +41,50 @@ public class HomeController {
 
     @Resource
     CourseService courseService;
+
+    @ApiOperation(value = "login", notes = "登录")
+    @PostMapping("login")
+    @ResponseBody
+    public ResponseData login(@RequestBody User user, HttpServletRequest request) {
+        //这里使用了用户类的个性签名作为验证码的接受
+        return userService.login(user,request);
+
+    }
+
+    @ApiOperation(value = "getCode", notes = "获取验证码")
+    @GetMapping("/getCode")
+    public void getCode(HttpServletRequest request, HttpServletResponse response) {
+        ValidateCode validataCode = new ValidateCode(160, 40, 4, 20);
+        //前端输入验证码 在后台验证
+        String code = validataCode.getCode();
+        request.getSession().setAttribute("code", code);
+        request.getSession().setMaxInactiveInterval(300); //秒为单位
+        try {
+            validataCode.write(response.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 跳转到index
+     * @return
+     */
+    @ApiIgnore
+    @RequestMapping("getIndex")
+    public String getIndex() {
+        return "index";
+    }
+
+    /**
+     * 跳转到main
+     * @return
+     */
+    @ApiIgnore
+    @RequestMapping("getMain")
+    public String geiMain() {
+        return "main";
+    }
 
 
     /**

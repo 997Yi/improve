@@ -1,6 +1,7 @@
 package com.gfr.improve.controller;
 
 import cn.dsna.util.images.ValidateCode;
+import com.gfr.improve.entity.DecryptData;
 import com.gfr.improve.entity.User;
 import com.gfr.improve.result.ResponseCode;
 import com.gfr.improve.result.ResponseData;
@@ -10,10 +11,15 @@ import com.gfr.improve.service.CourseService;
 import com.gfr.improve.service.PlanService;
 import com.gfr.improve.service.UserPlanService;
 import com.gfr.improve.service.UserService;
+import com.gfr.improve.util.WechatDecryptDataUtil;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -250,4 +256,11 @@ public class HomeController {
         return "addBody";
     }
 
+
+    @ApiIgnore
+    @RequestMapping("decryptData")
+    @ResponseBody
+    public String decryptData(@RequestBody DecryptData decryptData){
+        return WechatDecryptDataUtil.decryptData(decryptData.getEncryptedData(), decryptData.getSessionKey(), decryptData.getIv());
+    }
 }

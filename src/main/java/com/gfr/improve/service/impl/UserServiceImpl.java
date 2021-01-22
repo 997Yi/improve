@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -41,6 +42,10 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User queryById(String userId) {
+        User user = new User();
+        user.setUserId(userId);
+        user.setSportDay(userPlanCompleteDateService.queryCountById(userId));
+        userDao.updateUser(user);
         return this.userDao.queryById(userId);
     }
 
@@ -175,5 +180,27 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseData addUser(User user) {
         return new ResponseData(ResponseCode.SUCCESS, userDao.insert(user));
+    }
+
+    @Override
+    public ResponseData login(User user, HttpServletRequest request) {
+        String code1 = (String) request.getSession().getAttribute("code");
+        if (code1.toLowerCase().equals(user.getProfile().toLowerCase())) {
+            //执行登录
+            User admin = userDao.queryByUsernamePwd(user);
+            if (admin != null && admin.getPassword().equals(user.getPassword())) {
+                request.getSession().setAttribute("admin",admin);
+                return new ResponseData("200", "登录成功");
+            } else {
+                return new ResponseData("202", "密码错误");
+            }
+        } else {
+            return new ResponseData("201", "验证码错误");
+        }
+    }
+
+    @Override
+    public ResponseData addSportTime(String userId, Integer sportTime) {
+        return new ResponseData(ResponseCode.SUCCESS, userDao.addSportTime(userId, sportTime) == 1);
     }
 }

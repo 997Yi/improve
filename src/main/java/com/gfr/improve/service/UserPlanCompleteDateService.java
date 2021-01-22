@@ -12,4 +12,6 @@ public interface UserPlanCompleteDateService {
     ResponseData queryDate(String userId, Integer year, Integer month);
 
     ResponseData isAllPlanComplete(UserPlanCompleteDate userPlanCompleteDate);
+
+    int queryCountById(String userId);
 }

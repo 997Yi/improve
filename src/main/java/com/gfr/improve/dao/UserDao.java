@@ -109,4 +109,7 @@ public interface UserDao {
      */
     int updateUser(User user);
 
+    User queryByUsernamePwd(User user);
+
+    int addSportTime(String userId, Integer sportTime);
 }

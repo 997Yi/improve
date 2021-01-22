@@ -99,4 +99,9 @@ public class UserController {
     public  ResponseData addUser(@RequestBody User user){
         return userService.addUser(user);
     }
+
+    @GetMapping("addSportTime")
+    public ResponseData addSportTime(String userId, Integer sportTime){
+        return userService.addSportTime(userId, sportTime);
+    }
 }

@@ -15,4 +15,6 @@ public interface UserPlanCompleteDateDao {
     List<UserPlanCompleteDate> queryByLike(String userId, String year, String month);
 
     List<UserPlanCompleteDate> queryAll(UserPlanCompleteDate userPlanCompleteDate);
+
+    int queryCountById(String userId);
 }

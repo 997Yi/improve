@@ -81,49 +81,52 @@ public class UserPlanCompleteDateServiceImpl implements UserPlanCompleteDateServ
             dateList.add(a.toString());
         }
         dateList.sort((s1,s2) -> (Integer.parseInt(s1) - Integer.parseInt(s2)));
-        switch (month){
-            case "01":
-            case "03":
-            case "05":
-            case "07":
-            case "08":
-            case "10":
-            case "12":
-                for (int i = 0; i < 31; i++) {
-                    if (dateList.get(i).compareTo(i+1 + "") != 0){
-                        isAllPlanComplete = false;
-                        break;
+        if (!dateList.isEmpty()){
+            switch (month){
+                case "01":
+                case "03":
+                case "05":
+                case "07":
+                case "08":
+                case "10":
+                case "12":
+                    for (int i = 0; i < 31; i++) {
+                        if (dateList.get(i).compareTo(i+1 + "") != 0){
+                            isAllPlanComplete = false;
+                            break;
+                        }
                     }
-                }
-                break;
-            case "04":
-            case "06":
-            case "09":
-            case "11":
-                for (int i = 0; i < 30; i++) {
-                    if (dateList.get(i).compareTo(i+1<10 ? "0" + i : "" + i) != 0){
-                        isAllPlanComplete = false;
-                        break;
-                    }
-                }
-                break;
-            case "02":
-                if (Integer.parseInt(year) % 4 == 0 && Integer.parseInt(year) % 100 != 0 || Integer.parseInt(year) % 400 == 0){
-                    for (int i = 0; i < 29; i++) {
+                    break;
+                case "04":
+                case "06":
+                case "09":
+                case "11":
+                    for (int i = 0; i < 30; i++) {
                         if (dateList.get(i).compareTo(i+1<10 ? "0" + i : "" + i) != 0){
                             isAllPlanComplete = false;
                             break;
                         }
                     }
-                }else {
-                    for (int i = 0; i < 28; i++) {
-                        if (dateList.get(i).compareTo(i+1<10 ? "0" + i : "" + i) != 0){
-                            isAllPlanComplete = false;
-                            break;
+                    break;
+                case "02":
+                    if (Integer.parseInt(year) % 4 == 0 && Integer.parseInt(year) % 100 != 0 || Integer.parseInt(year) % 400 == 0){
+                        for (int i = 0; i < 29; i++) {
+                            if (dateList.get(i).compareTo(i+1<10 ? "0" + i : "" + i) != 0){
+                                isAllPlanComplete = false;
+                                break;
+                            }
+                        }
+                    }else {
+                        for (int i = 0; i < 28; i++) {
+                            if (dateList.get(i).compareTo(i+1<10 ? "0" + i : "" + i) != 0){
+                                isAllPlanComplete = false;
+                                break;
+                            }
                         }
                     }
-                }
+            }
         }
+
         return new ResponseData(ResponseCode.SUCCESS, isAllPlanComplete);// ? "true" : "false"
     }
 

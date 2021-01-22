@@ -29,4 +29,11 @@
             user_id = #{userId} and
             plan_complete_date like concat(#{year},"%", #{month},"%")
     </select>
+
+    <select id="queryAll" resultMap="UserPlanCompleteDateMap">
+        select user_id, plan_complete_date from user_plan_complete_date
+        where
+            user_id = #{userId} and
+            DATE(plan_complete_date) = DATE(#{planCompleteDate})
+    </select>
 </mapper>

@@ -168,12 +168,21 @@ public class PlanServiceImpl implements PlanService {
 
 
     @Override
-    public ResponseData queryNewPlan() {
+    public ResponseData queryNewPlan(Integer offset, Integer limit) {
+        //获取当天的开始时间
         Plan time = new Plan();
         time.setPlanStart(DateUtil.getStart());
 
+        //分页数据初始化
+        if(offset == null || limit == null){
+            offset = 0;
+            limit = 5;
+        }else{
+            offset = (offset - 1) * limit;
+        }
+
         //查询当日发布的所有计划
-        List<Plan> plans = planDao.queryAll(time);
+        List<Plan> plans = planDao.queryAllWithLimit(time, offset, limit);
         List<Map<String, Object>> resList = new LinkedList<>();
         Map<String, Object> map;
 
@@ -192,7 +201,7 @@ public class PlanServiceImpl implements PlanService {
             resList.add(map);
         }
 
-        return new ResponseData(ResponseCode.SUCCESS, resList);
+        return new ResponseData(ResponseCode.SUCCESS, resList, planDao.getDateCount(time.getPlanStart()));
     }
 
     /**

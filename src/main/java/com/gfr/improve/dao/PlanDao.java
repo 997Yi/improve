@@ -3,6 +3,7 @@ package com.gfr.improve.dao;
 import com.gfr.improve.entity.Plan;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,6 +40,15 @@ public interface PlanDao {
     List<Plan> queryAll(Plan plan);
 
     /**
+     * 通过实体进行筛选条件的分页查询
+     * @param time
+     * @param offset
+     * @param limit
+     * @return
+     */
+    List<Plan> queryAllWithLimit(@Param("plan") Plan time,@Param("offset") Integer offset,@Param("limit") Integer limit);
+
+    /**
      * 查询数据总量
      * @return
      */
@@ -52,6 +62,13 @@ public interface PlanDao {
      * @return
      */
     List<Plan> queryByCondition(@Param("condition") String condition,@Param("offset") Integer offset, @Param("limit")Integer limit);
+
+    /**
+     * 查询某个时期的数据总量
+     * @param date
+     * @return
+     */
+    Integer getDateCount(Date date);
 
     /**
      * 查询条件数据总量
@@ -112,5 +129,6 @@ public interface PlanDao {
      * @return 影响行数
      */
     int deleteById(String planId);
+
 
 }

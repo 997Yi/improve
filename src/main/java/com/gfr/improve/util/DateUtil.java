@@ -13,7 +13,8 @@ import java.util.GregorianCalendar;
  */
 public class DateUtil {
     public static boolean checkTime(Date date){
-        return date.after(getStart());
+        Date start = getStart();
+        return  date.getTime() >= start.getTime();
     }
 
 

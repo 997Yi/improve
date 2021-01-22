@@ -32,7 +32,7 @@ public class UserPlanCompleteDateController {
         return userPlanCompleteDateService.queryDate(userId, year, month);
     }
 
-    @ApiOperation(value = "insert",notes = "插入打卡日期")
+    @ApiOperation(value = "insert",notes = "插入打卡日期, 今日已存在则不插入并返回false")
     @PutMapping("insert")
     public ResponseData insert(@RequestBody UserPlanCompleteDate userPlanCompleteDate){
         return userPlanCompleteDateService.insert(userPlanCompleteDate);

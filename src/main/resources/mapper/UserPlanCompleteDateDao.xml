@@ -38,7 +38,7 @@
     </select>
 
     <select id="queryCountById" resultType="java.lang.Integer">
-        select count(user_id)
-        where user_id = {userId};
+        select count(user_id) from user_plan_complete_date
+        where user_id=#{userId};
     </select>
 </mapper>

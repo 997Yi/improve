@@ -46,7 +46,9 @@ public class UserServiceImpl implements UserService {
         user.setUserId(userId);
         user.setSportDay(userPlanCompleteDateService.queryCountById(userId));
         userDao.updateUser(user);
-        return this.userDao.queryById(userId);
+        user = this.userDao.queryById(userId);
+        user.setSportTime(user.getSportTime()/60);
+        return user;
     }
 
     /**

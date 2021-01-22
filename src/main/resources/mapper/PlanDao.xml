@@ -32,6 +32,12 @@
         from improve.plan
     </select>
 
+    <select id="getDateCount" resultType="Integer">
+        select count(plan_id)
+        from improve.plan
+        where DATE(plan_start) = DATE(#{date})
+    </select>
+
     <select id="getLikeCount" resultType="Integer">
         select count(plan_id)
         from improve.plan
@@ -76,6 +82,27 @@
                 and course_id = #{courseId}
             </if>
         </where>
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAllWithLimit" resultMap="PlanMap">
+        <include refid="selectAll"></include>
+        from improve.plan
+        <where>
+            <if test="plan.planId != null and plan.planId != ''">
+                and plan_id = #{plan.planId}
+            </if>
+            <if test="plan.planStart != null">
+                and DATE(plan_start) = DATE(#{plan.planStart})
+            </if>
+            <if test="plan.planEnd != null">
+                and plan_end = #{plan.planEnd}
+            </if>
+            <if test="plan.courseId != null and plan.courseId != ''">
+                and course_id = #{plan.courseId}
+            </if>
+        </where>
+        limit #{offset}, #{limit}
     </select>
 
     <!--新增所有列-->

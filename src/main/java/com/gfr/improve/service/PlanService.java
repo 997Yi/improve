@@ -46,10 +46,11 @@ public interface PlanService {
 
     /**
      * 查询当日最新的计划
-     * @param id
+     * @param page
+     * @param limit
      * @return
      */
-    ResponseData queryNewPlan();
+    ResponseData queryNewPlan(Integer page, Integer limit);
 
 
 

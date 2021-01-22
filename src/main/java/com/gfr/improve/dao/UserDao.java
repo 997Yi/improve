@@ -111,4 +111,5 @@ public interface UserDao {
 
     User queryByUsernamePwd(User user);
 
+    int addSportTime(String userId, Integer sportTime);
 }

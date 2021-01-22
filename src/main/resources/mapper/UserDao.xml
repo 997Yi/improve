@@ -197,4 +197,10 @@
         from improve.user
         where username = #{username};
     </select>
+
+    <update id="addSportTime">
+        update improve.user
+        set sportTime = sportTime + #{sportTime}
+        where user_id = #{userId};
+    </update>
 </mapper>

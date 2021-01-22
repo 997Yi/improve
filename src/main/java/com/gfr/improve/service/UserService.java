@@ -92,4 +92,6 @@ public interface UserService {
      * @return
      */
     ResponseData login(User user, HttpServletRequest request);
+
+    ResponseData addSportTime(String userId,Integer sportTime);
 }

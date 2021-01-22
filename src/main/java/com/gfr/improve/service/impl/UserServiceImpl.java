@@ -194,4 +194,9 @@ public class UserServiceImpl implements UserService {
             return new ResponseData("201", "验证码错误");
         }
     }
+
+    @Override
+    public ResponseData addSportTime(String userId, Integer sportTime) {
+        return new ResponseData(ResponseCode.SUCCESS, userDao.addSportTime(userId, sportTime) == 1);
+    }
 }

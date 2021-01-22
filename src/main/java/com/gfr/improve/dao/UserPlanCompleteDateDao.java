@@ -13,4 +13,6 @@ public interface UserPlanCompleteDateDao {
     List<UserPlanCompleteDate> queryDate(String userId);
 
     List<UserPlanCompleteDate> queryByLike(String userId, String year, String month);
+
+    List<UserPlanCompleteDate> queryAll(UserPlanCompleteDate userPlanCompleteDate);
 }

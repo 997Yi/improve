@@ -24,7 +24,12 @@ public class UserPlanCompleteDateServiceImpl implements UserPlanCompleteDateServ
     @Override
     public ResponseData insert(UserPlanCompleteDate userPlanCompleteDate) {
         userPlanCompleteDate.setPlanCompleteDate(new Date(System.currentTimeMillis()));
-        return new ResponseData(ResponseCode.SUCCESS, userPlanCompleteDateDao.insert(userPlanCompleteDate) == 1);
+        List<UserPlanCompleteDate> list = userPlanCompleteDateDao.queryAll(userPlanCompleteDate);
+        if(list.size() == 0){
+            return new ResponseData(ResponseCode.SUCCESS, userPlanCompleteDateDao.insert(userPlanCompleteDate) == 1);
+        }else{
+            return new ResponseData(ResponseCode.FAILED);
+        }
     }
 
     @Override

@@ -109,4 +109,6 @@ public interface UserDao {
      */
     int updateUser(User user);
 
+    User queryByUsernamePwd(User user);
+
 }

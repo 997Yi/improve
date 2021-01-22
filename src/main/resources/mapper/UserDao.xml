@@ -75,8 +75,8 @@
 
     <!--新增所有列-->
     <insert id="insert" keyProperty="userId" useGeneratedKeys="true">
-        insert into improve.user(user_id, username, password)
-        values (uuid(), #{username}, #{password});
+        insert into improve.user(user_id, username)
+        values (uuid(), #{username});
     </insert>
 
     <insert id="insertBatch" keyProperty="userId" useGeneratedKeys="true">
@@ -191,4 +191,10 @@
         </set>
         where user_id = #{userId};
     </update>
+
+    <select id="queryByUsernamePwd" resultMap="UserMap">
+        select user_id, username, password, telephone, user_icon, sport_time, sport_day, profile
+        from improve.user
+        where username = #{username};
+    </select>
 </mapper>

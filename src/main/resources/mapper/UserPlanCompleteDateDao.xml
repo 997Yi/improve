@@ -36,4 +36,9 @@
             user_id = #{userId} and
             DATE(plan_complete_date) = DATE(#{planCompleteDate})
     </select>
+
+    <select id="queryCountById" resultType="java.lang.Integer">
+        select count(user_id)
+        where user_id = {userId};
+    </select>
 </mapper>

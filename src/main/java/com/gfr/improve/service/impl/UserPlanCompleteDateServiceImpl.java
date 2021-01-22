@@ -126,4 +126,9 @@ public class UserPlanCompleteDateServiceImpl implements UserPlanCompleteDateServ
         }
         return new ResponseData(ResponseCode.SUCCESS, isAllPlanComplete);// ? "true" : "false"
     }
+
+    @Override
+    public int queryCountById(String userId) {
+        return userPlanCompleteDateDao.queryCountById(userId);
+    }
 }

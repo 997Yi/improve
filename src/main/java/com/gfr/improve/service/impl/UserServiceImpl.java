@@ -42,6 +42,10 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User queryById(String userId) {
+        User user = new User();
+        user.setUserId(userId);
+        user.setSportDay(userPlanCompleteDateService.queryCountById(userId));
+        userDao.updateUser(user);
         return this.userDao.queryById(userId);
     }
 
